@@ -3,10 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
     <title>Content Manager — Northeast Explorer</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/decap-cms-app@^3.0.0/dist/decap-cms-app.js"></script>
+    <script>
+      const { init } = window.DecapCmsApp;
+      init({
+        config: {
+          backend: {
+            name: "github",
+            repo: "MrKundanGupta/northeast-wind",
+            branch: "main",
+            auth_type: "pkce",
+            app_id: "Ov23li8b74lr4lGdQDHe",
+          },
+        },
+      });
+    </script>
   </body>
 </html>
