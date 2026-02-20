@@ -2,6 +2,7 @@ backend:
   name: github
   repo: MrKundanGupta/northeast-wind
   branch: main
+  app_id: Ov23liN9RalJ3AvBoV2R
 
 media_folder: public/images
 public_folder: /images
