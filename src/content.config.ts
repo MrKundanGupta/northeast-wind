@@ -4,7 +4,7 @@ import { glob } from "astro/loaders";
 const places = defineCollection({
   loader: glob({ pattern: "**/*.mdx", base: "./src/content/places" }),
   schema: z.object({
-    id: z.string(),
+    id: z.string().default(""),
     name: z.string(),
     category: z.string(),
     sub_category: z.string(),
@@ -12,15 +12,15 @@ const places = defineCollection({
     high_intent_motivation: z.string(),
 
     ratings: z.object({
-      google_rating: z.number().nullable(),
-      google_reviews_count: z.string().nullable(),
-      our_rating: z.number().nullable(),
+      google_rating: z.number().nullable().default(null),
+      google_reviews_count: z.string().nullable().default(null),
+      our_rating: z.number().nullable().default(null),
     }),
 
     entry_fees: z.object({
-      indian_inr: z.string(),
-      foreigner_inr: z.string(),
-      special_entry_notes: z.string(),
+      indian_inr: z.string().default(""),
+      foreigner_inr: z.string().default(""),
+      special_entry_notes: z.string().default(""),
     }),
 
     location: z.object({
