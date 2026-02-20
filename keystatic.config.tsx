@@ -2,7 +2,7 @@ import { config, fields, collection } from "@keystatic/core";
 
 export default config({
   storage: { kind: "cloud" },
-  cloud: { project: "northeast-wind/northeast-wind" },
+  cloud: { project: "mrkundangupta/northeast-wind" },
 
   collections: {
     places: collection({
