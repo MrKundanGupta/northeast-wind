@@ -1,14 +1,8 @@
 import { config, fields, collection } from "@keystatic/core";
 
-const isLocal = import.meta.env.DEV;
-
 export default config({
-  storage: isLocal
-    ? { kind: "local" }
-    : {
-        kind: "github",
-        repo: "MrKundanGupta/northeast-wind",
-      },
+  storage: { kind: "cloud" },
+  cloud: { project: "northeast-wind/northeast-wind" },
 
   collections: {
     places: collection({
