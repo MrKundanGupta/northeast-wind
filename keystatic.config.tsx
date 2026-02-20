@@ -279,8 +279,47 @@ export default config({
           itemLabel: (props) => props.value || "New image",
         }),
 
+        // ── Hub & Spoke SEO ────────────────────────────
+        city: fields.text({
+          label: "City",
+          description: "e.g. Guwahati",
+          validation: { isRequired: true },
+        }),
+        region: fields.text({
+          label: "Region",
+          description: "e.g. Assam",
+          validation: { isRequired: true },
+        }),
+        map_location: fields.object(
+          {
+            lat: fields.number({
+              label: "Latitude",
+              step: 0.0001,
+              validation: { isRequired: true },
+            }),
+            lng: fields.number({
+              label: "Longitude",
+              step: 0.0001,
+              validation: { isRequired: true },
+            }),
+            Maps_url: fields.url({
+              label: "Google Maps URL",
+            }),
+          },
+          { label: "Map Location" }
+        ),
+        hub_images: fields.array(fields.text({ label: "Image path" }), {
+          label: "Hub Images (min 3)",
+          itemLabel: (props) => props.value || "New image",
+          validation: { length: { min: 3 } },
+        }),
+        seo_tags: fields.array(fields.text({ label: "Tag" }), {
+          label: "SEO Tags",
+          itemLabel: (props) => props.value || "New tag",
+        }),
+
         // ── Body (MDX content) ──────────────────────────
-        body: fields.markdoc({
+        body: fields.mdx({
           label: "Body",
         }),
       },

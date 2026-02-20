@@ -1,0 +1,118 @@
+---
+/**
+ * PlaceCard — Listing card for a destination.
+ *
+ * FRONTEND.md rules enforced:
+ *  - Visuals First: 4:3 aspect-ratio image, object-cover, hover:scale-105 duration-300
+ *  - Cards: rounded-2xl, border-gray-100, shadow-sm hover:shadow-md
+ *  - Typography: title bold text-gray-900, meta text-gray-500
+ *  - Whitespace: generous internal padding, nothing crammed
+ */
+import AddToTripButton from "./AddToTripButton";
+
+interface LogisticsEntry {
+  hub_name: string;
+  hub_type: string;
+  distance_km: number;
+  drive_time_mins: number;
+}
+
+interface Props {
+  id: string;
+  name: string;
+  category: string;
+  subCategory: string;
+  state: string;
+  googleRating: number | null;
+  reviewsCount: string | null;
+  tags: string[];
+  image?: string;
+  logistics?: LogisticsEntry[];
+}
+
+const { id, name, category, subCategory, state, googleRating, reviewsCount, tags, image, logistics = [] } = Astro.props;
+
+const hasImage = image && image.length > 0;
+
+/** Serialised place object for the React island — all JSON-safe primitives. */
+const cartPlace = {
+  id,
+  name,
+  category,
+  subCategory,
+  state,
+  googleRating,
+  image: image ?? "",
+  logistics,
+};
+---
+
+<a
+  href={`/places/${id}`}
+  class="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:shadow-md"
+>
+  {/* ── Image — 4:3 aspect, object-cover, hover zoom ──────── */}
+  <div class="relative aspect-4/3 overflow-hidden bg-gray-100">
+    {hasImage ? (
+      <img
+        src={image}
+        alt={name}
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+      />
+    ) : (
+      <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-emerald-50 to-emerald-100 transition duration-300 group-hover:scale-105">
+        <svg class="h-12 w-12 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+        </svg>
+      </div>
+    )}
+
+    {/* ── Category badge — pinned top-left over image ────── */}
+    <span class="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm backdrop-blur-sm">
+      {category}
+    </span>
+
+    {/* ── Add to Trip button — between category and rating ── */}
+    <AddToTripButton client:visible place={cartPlace} />
+
+    {/* ── Rating badge — pinned top-right over image ─────── */}
+    {googleRating && (
+      <span class="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-amber-600 shadow-sm backdrop-blur-sm">
+        <span>&#9733;</span> {googleRating}
+      </span>
+    )}
+  </div>
+
+  {/* ── Content area — generous padding ───────────────────── */}
+  <div class="flex flex-1 flex-col p-5">
+    {/* ── Title — bold, high-contrast ──────────────────── */}
+    <h2 class="text-lg font-bold text-gray-900 group-hover:text-emerald-700 transition-colors duration-200">
+      {name}
+    </h2>
+
+    {/* ── Meta — subtle text ──────────────────────────── */}
+    <p class="mt-1.5 text-sm text-gray-500">
+      {subCategory} &middot; {state}
+    </p>
+
+    {/* ── Reviews count ───────────────────────────────── */}
+    {reviewsCount && (
+      <p class="mt-1 text-xs text-gray-400">
+        {reviewsCount} Google reviews
+      </p>
+    )}
+
+    {/* ── Tags — pushed to bottom ─────────────────────── */}
+    {tags.length > 0 && (
+      <div class="mt-auto flex flex-wrap gap-1.5 pt-4">
+        {tags.slice(0, 3).map((tag) => (
+          <span class="rounded-full bg-gray-50 px-2.5 py-0.5 text-xs font-medium text-gray-500">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+</a>

@@ -65,6 +65,17 @@ const places = defineCollection({
     }),
 
     images: z.array(z.string()),
+
+    /* ── Hub & Spoke SEO fields ─────────────────────────── */
+    city: z.string(),
+    region: z.string(),
+    map_location: z.object({
+      lat: z.number(),
+      lng: z.number(),
+      Maps_url: z.string().url(),
+    }),
+    hub_images: z.array(z.string()).min(3),
+    seo_tags: z.array(z.string()),
   }),
 });
 

@@ -14,16 +14,20 @@
     "@astrojs/react": "^4.4.2",
     "@keystatic/astro": "^5.0.6",
     "@keystatic/core": "^0.5.48",
+    "@nanostores/react": "^1.0.0",
     "@tailwindcss/vite": "^4.2.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "astro": "^5.17.1",
     "leaflet": "^1.9.4",
+    "nanostores": "^1.1.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwindcss": "^4.2.0"
   },
   "devDependencies": {
-    "@types/leaflet": "^1.9.21"
+    "@types/leaflet": "^1.9.21",
+    "axios": "^1.13.5",
+    "sharp": "^0.34.5"
   }
 }

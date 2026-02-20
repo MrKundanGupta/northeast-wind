@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import CartToggleButton from "../components/CartToggleButton";
+import TripSidebar from "../components/TripSidebar";
 
 interface Props {
   title: string;
@@ -24,11 +26,12 @@ const { title, description = "Explore the best destinations across Northeast Ind
       <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between">
           <a href="/" class="text-xl font-bold text-emerald-700">Northeast Explorer</a>
-          <div class="flex gap-6 text-sm font-medium text-gray-600">
+          <div class="flex items-center gap-6 text-sm font-medium text-gray-600">
             <a href="/" class="hover:text-emerald-700">All Places</a>
             <a href="/states" class="hover:text-emerald-700">By State</a>
             <a href="/plan" class="hover:text-emerald-700">Plan by Hub</a>
             <a href="/map" class="hover:text-emerald-700">Map</a>
+            <CartToggleButton client:load />
           </div>
         </div>
       </div>
@@ -43,5 +46,7 @@ const { title, description = "Explore the best destinations across Northeast Ind
         Northeast Explorer &mdash; Your guide to Northeast India's best destinations.
       </div>
     </footer>
+
+    <TripSidebar client:load />
   </body>
 </html>
