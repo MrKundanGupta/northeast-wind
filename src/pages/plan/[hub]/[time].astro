@@ -1,0 +1,228 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import {
+  hubToSlug,
+  slugToLabel,
+  fmtDrive,
+  TIME_BRACKETS,
+} from "../../../lib/hub-utils";
+
+/* ------------------------------------------------------------------ */
+/*  getStaticPaths                                                    */
+/* ------------------------------------------------------------------ */
+
+export async function getStaticPaths() {
+  const allPlaces = await getCollection("places");
+
+  // 1. Collect every unique hub → slug + original name
+  const hubReg = new Map<string, string>();
+  for (const p of allPlaces) {
+    for (const l of p.data.logistics) {
+      const s = hubToSlug(l.hub_name);
+      if (!hubReg.has(s)) hubReg.set(s, l.hub_name);
+    }
+  }
+
+  // 2. For each hub, compute matches per time bracket
+  const paths: any[] = [];
+
+  for (const [hSlug, fullName] of hubReg) {
+    const availableSlugs: string[] = [];
+    const bracketResults = new Map<string, any[]>();
+
+    for (const b of TIME_BRACKETS) {
+      const hits: {
+        id: string;
+        name: string;
+        category: string;
+        subCategory: string;
+        state: string;
+        googleRating: number | null;
+        reviewsCount: string | null;
+        driveTimeMins: number;
+        distanceKm: number;
+        tags: string[];
+        entryFee: string;
+      }[] = [];
+
+      for (const p of allPlaces) {
+        const l = p.data.logistics.find(
+          (x) =>
+            hubToSlug(x.hub_name) === hSlug && x.drive_time_mins < b.maxMins,
+        );
+        if (l) {
+          hits.push({
+            id: p.data.id,
+            name: p.data.name,
+            category: p.data.category,
+            subCategory: p.data.sub_category,
+            state: p.data.location.state,
+            googleRating: p.data.ratings.google_rating,
+            reviewsCount: p.data.ratings.google_reviews_count,
+            driveTimeMins: l.drive_time_mins,
+            distanceKm: l.distance_km,
+            tags: p.data.tags,
+            entryFee: p.data.entry_fees.indian_inr,
+          });
+        }
+      }
+
+      if (hits.length > 0) {
+        hits.sort((a, b) => a.driveTimeMins - b.driveTimeMins);
+        availableSlugs.push(b.slug);
+        bracketResults.set(b.slug, hits);
+      }
+    }
+
+    // 3. Create a path for every hub × bracket that has results
+    for (const [bSlug, matched] of bracketResults) {
+      paths.push({
+        params: { hub: hSlug, time: bSlug },
+        props: {
+          fullHubName: fullName,
+          hubSlug: hSlug,
+          bracket: TIME_BRACKETS.find((b) => b.slug === bSlug)!,
+          matched,
+          availableBrackets: availableSlugs,
+        },
+      });
+    }
+  }
+
+  return paths;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Page props                                                        */
+/* ------------------------------------------------------------------ */
+
+const { fullHubName, hubSlug: hSlug, bracket, matched, availableBrackets } =
+  Astro.props;
+
+const hubLabel = slugToLabel(hSlug);
+---
+
+<BaseLayout
+  title={`Places ${bracket.label} from ${hubLabel} — Northeast Explorer`}
+  description={`${matched.length} destinations you can reach in ${bracket.label.toLowerCase()} from ${fullHubName}.`}
+>
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    {/* ── Breadcrumb ────────────────────────────────── */}
+    <nav class="mb-6 text-sm text-gray-500">
+      <a href="/" class="hover:text-emerald-700">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/plan" class="hover:text-emerald-700">Plan by Hub</a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-900">{hubLabel}</span>
+    </nav>
+
+    {/* ── Header ────────────────────────────────────── */}
+    <div class="mb-2">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+        {matched.length} places {bracket.label.toLowerCase()} from
+        <span class="text-red-600"> {hubLabel}</span>
+      </h1>
+      <p class="mt-1 text-gray-500">{fullHubName}</p>
+    </div>
+
+    {/* ── Time-bracket tabs ─────────────────────────── */}
+    <div class="mt-6 mb-8 flex flex-wrap gap-2">
+      {TIME_BRACKETS.map((b) => {
+        const isActive = b.slug === bracket.slug;
+        const exists = availableBrackets.includes(b.slug);
+        return exists ? (
+          <a
+            href={`/plan/${hSlug}/${b.slug}`}
+            class:list={[
+              "rounded-full px-4 py-1.5 text-sm font-medium transition",
+              isActive
+                ? "bg-red-600 text-white shadow-sm"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200",
+            ]}
+          >
+            {b.label}
+          </a>
+        ) : (
+          <span class="cursor-not-allowed rounded-full bg-gray-50 px-4 py-1.5 text-sm text-gray-300">
+            {b.label}
+          </span>
+        );
+      })}
+    </div>
+
+    {/* ── Results grid ──────────────────────────────── */}
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {matched.map((m: any) => (
+        <a
+          href={`/places/${m.id}`}
+          class="group relative rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:border-red-300 hover:shadow-md"
+        >
+          {/* ── Drive time — RED highlight ─────────── */}
+          <div class="mb-4 flex items-center justify-between">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-3 py-1.5 text-sm font-bold text-red-600 ring-1 ring-inset ring-red-200">
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.828a1 1 0 101.415-1.414L11 9.586V6z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              {fmtDrive(m.driveTimeMins)}
+            </span>
+            <span class="text-xs font-medium text-gray-400">
+              {m.distanceKm} km
+            </span>
+          </div>
+
+          {/* ── Category pill ──────────────────────── */}
+          <span class="rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
+            {m.category}
+          </span>
+
+          {/* ── Name ───────────────────────────────── */}
+          <h2 class="mt-2 text-lg font-semibold text-gray-900 group-hover:text-emerald-700">
+            {m.name}
+          </h2>
+
+          {/* ── State + sub-category ───────────────── */}
+          <p class="mt-1 text-sm text-gray-500">
+            {m.subCategory} &middot; {m.state}
+          </p>
+
+          {/* ── Entry fee ──────────────────────────── */}
+          <p class="mt-1 text-xs text-gray-400">Entry: {m.entryFee}</p>
+
+          {/* ── Rating ─────────────────────────────── */}
+          {m.googleRating && (
+            <div class="mt-3 flex items-center gap-2">
+              <span class="flex items-center gap-1 text-sm font-medium text-amber-500">
+                <span>&#9733;</span>
+                {m.googleRating}
+              </span>
+              {m.reviewsCount && (
+                <span class="text-xs text-gray-400">
+                  ({m.reviewsCount} reviews)
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* ── Tags ───────────────────────────────── */}
+          <div class="mt-3 flex flex-wrap gap-1">
+            {m.tags.slice(0, 3).map((tag: string) => (
+              <span class="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,77 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import TripPlannerMap from "../components/TripPlannerMap.jsx";
+import { getCollection } from "astro:content";
+import { hubToSlug } from "../lib/hub-utils";
+
+const allPlaces = await getCollection("places");
+
+/* ── Build places array for the map component ────────────────────── */
+const places = allPlaces.map((p) => ({
+  id: p.data.id,
+  name: p.data.name,
+  lat: p.data.location.lat,
+  lng: p.data.location.lng,
+  category: p.data.category,
+  state: p.data.location.state,
+  rating: p.data.ratings.google_rating,
+  logistics: p.data.logistics.map((l) => ({
+    hub_name: l.hub_name,
+    hub_type: l.hub_type,
+    distance_km: l.distance_km,
+    drive_time_mins: l.drive_time_mins,
+  })),
+}));
+
+/* ── Hub coordinates (transport hubs across NE India) ────────────── */
+const HUB_COORDS: Record<string, { lat: number; lng: number }> = {
+  "Lokpriya Gopinath Bordoloi International Airport, Guwahati (GAU)": { lat: 26.1061, lng: 91.5859 },
+  "Guwahati Railway Station": { lat: 26.1850, lng: 91.7530 },
+  "Donyi Polo Airport, Itanagar (HGI)": { lat: 27.1000, lng: 93.6800 },
+  "Tezpur Airport (TEZ)": { lat: 26.7100, lng: 92.7847 },
+  "Naharlagun Railway Station": { lat: 27.1000, lng: 93.6900 },
+  "Imphal Airport (IMF)": { lat: 24.7600, lng: 93.8967 },
+  "Jiribam Railway Station": { lat: 24.8000, lng: 93.1200 },
+  "Dimapur Airport (DMU)": { lat: 25.8839, lng: 93.7711 },
+  "Dimapur Railway Station": { lat: 25.8750, lng: 93.7300 },
+  "Pakyong Airport (PYG)": { lat: 27.2253, lng: 88.5862 },
+  "Bagdogra Airport (IXB)": { lat: 26.6812, lng: 88.3286 },
+  "New Jalpaiguri Railway Station (NJP)": { lat: 26.7050, lng: 88.4353 },
+  "Agartala Airport (IXA)": { lat: 23.8870, lng: 91.2404 },
+  "Agartala Railway Station": { lat: 23.8400, lng: 91.2700 },
+  "Lengpui Airport (AJL)": { lat: 23.8406, lng: 92.6197 },
+  "Bairabi Railway Station": { lat: 24.3700, lng: 92.6400 },
+  "Umroi Airport (SHL)": { lat: 25.7036, lng: 91.9787 },
+};
+
+/* ── Collect unique hubs from all places' logistics ──────────────── */
+const hubSet = new Set<string>();
+const hubs: { slug: string; name: string; lat: number; lng: number; type: string; fullName: string }[] = [];
+
+for (const p of allPlaces) {
+  for (const l of p.data.logistics) {
+    if (hubSet.has(l.hub_name)) continue;
+    const coords = HUB_COORDS[l.hub_name];
+    if (!coords) continue;
+    hubSet.add(l.hub_name);
+
+    const shortName = l.hub_name
+      .replace(/\([^)]*\)/g, "")
+      .replace(/,.*$/, "")
+      .trim();
+
+    hubs.push({
+      slug: hubToSlug(l.hub_name),
+      name: shortName,
+      type: l.hub_type === "airport" ? "airport" : "train",
+      fullName: l.hub_name,
+      lat: coords.lat,
+      lng: coords.lng,
+    });
+  }
+}
+---
+
+<BaseLayout title="Interactive Map — Northeast Explorer" description="Explore all destinations on an interactive map with hub-based trip planning.">
+  <TripPlannerMap client:only="react" places={places} hubs={hubs} />
+</BaseLayout>

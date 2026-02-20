@@ -1,0 +1,135 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const places = await getCollection("places");
+  return places.map((place) => ({
+    params: { id: place.data.id },
+    props: { place },
+  }));
+}
+
+const { place } = Astro.props;
+const { Content } = await render(place);
+const d = place.data;
+
+const isSpiritual = d.category === "Spiritual";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": isSpiritual ? "PlaceOfWorship" : "TouristAttraction",
+  name: d.name,
+  description: d.seo.meta_description,
+  image: d.images[0] || undefined,
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: d.location.lat,
+    longitude: d.location.lng,
+  },
+  publicAccess: true,
+};
+---
+
+<BaseLayout title={d.seo.meta_title} description={d.seo.meta_description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <article class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-sm text-gray-500">
+      <a href="/" class="hover:text-emerald-700">Home</a>
+      <span class="mx-2">/</span>
+      <a
+        href={`/states/${d.location.state.toLowerCase().replace(/\s+/g, "-")}`}
+        class="hover:text-emerald-700"
+      >
+        {d.location.state}
+      </a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-900">{d.name}</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="rounded-md bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+          {d.category}
+        </span>
+        <span class="rounded-md bg-gray-100 px-3 py-1 text-sm text-gray-600">
+          {d.sub_category}
+        </span>
+      </div>
+      <h1 class="text-4xl font-bold tracking-tight text-gray-900">{d.name}</h1>
+      <p class="mt-2 text-lg text-gray-600">{d.location.address}, {d.location.state}</p>
+
+      <!-- Rating -->
+      {d.ratings.google_rating && (
+        <div class="mt-4 flex items-center gap-4">
+          <div class="flex items-center gap-1 text-amber-500">
+            <span class="text-lg">&#9733;</span>
+            <span class="text-lg font-semibold">{d.ratings.google_rating}</span>
+          </div>
+          {d.ratings.google_reviews_count && (
+            <span class="text-sm text-gray-500">
+              {d.ratings.google_reviews_count} Google reviews
+            </span>
+          )}
+        </div>
+      )}
+
+      <!-- Tags -->
+      <div class="mt-4 flex flex-wrap gap-2">
+        {d.tags.map((tag) => (
+          <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </header>
+
+    <!-- Info cards -->
+    <div class="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Visiting Hours -->
+      <div class="rounded-lg border border-gray-200 bg-white p-4">
+        <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Visiting Hours</h3>
+        <p class="text-lg font-medium">{d.visiting_hours.open_time} — {d.visiting_hours.close_time}</p>
+        <p class="mt-1 text-sm text-gray-500">{d.visiting_hours.notes}</p>
+      </div>
+
+      <!-- Entry Fees -->
+      <div class="rounded-lg border border-gray-200 bg-white p-4">
+        <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Entry Fees</h3>
+        <p class="text-sm"><span class="font-medium">Indian:</span> {d.entry_fees.indian_inr}</p>
+        <p class="text-sm"><span class="font-medium">Foreigner:</span> {d.entry_fees.foreigner_inr}</p>
+        {d.entry_fees.special_entry_notes && (
+          <p class="mt-1 text-xs text-gray-500">{d.entry_fees.special_entry_notes}</p>
+        )}
+      </div>
+
+      <!-- Permit -->
+      <div class="rounded-lg border border-gray-200 bg-white p-4">
+        <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Permits</h3>
+        <div class="flex gap-3 text-sm">
+          <span class={d.permit_requirements.ilp_required ? "text-red-600 font-medium" : "text-green-600"}>
+            ILP: {d.permit_requirements.ilp_required ? "Required" : "Not needed"}
+          </span>
+        </div>
+        <p class="mt-1 text-xs text-gray-500">{d.permit_requirements.permit_details}</p>
+      </div>
+    </div>
+
+    <!-- MDX body content -->
+    <div class="prose prose-emerald max-w-none">
+      <Content />
+    </div>
+
+    <!-- Location -->
+    <div class="mt-10 rounded-lg border border-gray-200 bg-white p-6">
+      <h2 class="mb-4 text-xl font-bold">Location</h2>
+      <p class="text-sm text-gray-600">
+        Coordinates: {d.location.lat}, {d.location.lng}
+      </p>
+      <p class="text-sm text-gray-600">
+        {d.location.address}, {d.location.state}
+      </p>
+    </div>
+  </article>
+</BaseLayout>

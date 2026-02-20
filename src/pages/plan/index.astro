@@ -1,0 +1,86 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { hubToSlug, slugToLabel } from "../../lib/hub-utils";
+
+const allPlaces = await getCollection("places");
+
+// Build hub info: slug → { fullName, placeCount, type }
+const hubInfo = new Map<
+  string,
+  { fullName: string; count: number; type: string }
+>();
+for (const p of allPlaces) {
+  for (const l of p.data.logistics) {
+    const s = hubToSlug(l.hub_name);
+    if (!hubInfo.has(s)) {
+      hubInfo.set(s, {
+        fullName: l.hub_name,
+        count: 0,
+        type: /airport/i.test(l.hub_name) ? "airport" : "train",
+      });
+    }
+    hubInfo.get(s)!.count++;
+  }
+}
+
+const airports = [...hubInfo.entries()]
+  .filter(([, v]) => v.type === "airport")
+  .sort((a, b) => b[1].count - a[1].count);
+
+const railways = [...hubInfo.entries()]
+  .filter(([, v]) => v.type === "train")
+  .sort((a, b) => b[1].count - a[1].count);
+---
+
+<BaseLayout title="Plan by Transport Hub — Northeast Explorer">
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+      Plan by Transport Hub
+    </h1>
+    <p class="mt-2 text-lg text-gray-600">
+      Pick an airport or railway station to see what's reachable within your
+      time budget.
+    </p>
+
+    {/* ── Airports ─────────────────────────────────── */}
+    <h2 class="mt-10 mb-4 text-xl font-semibold text-gray-800">Airports</h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {airports.map(([slug, info]) => (
+        <a
+          href={`/plan/${slug}/under-2-hours`}
+          class="group rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+        >
+          <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700">
+            {slugToLabel(slug)}
+          </h3>
+          <p class="mt-1 text-xs text-gray-400">{info.fullName}</p>
+          <p class="mt-2 text-sm text-gray-600">
+            {info.count} reachable places
+          </p>
+        </a>
+      ))}
+    </div>
+
+    {/* ── Railway Stations ─────────────────────────── */}
+    <h2 class="mt-10 mb-4 text-xl font-semibold text-gray-800">
+      Railway Stations
+    </h2>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {railways.map(([slug, info]) => (
+        <a
+          href={`/plan/${slug}/under-2-hours`}
+          class="group rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+        >
+          <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700">
+            {slugToLabel(slug)}
+          </h3>
+          <p class="mt-1 text-xs text-gray-400">{info.fullName}</p>
+          <p class="mt-2 text-sm text-gray-600">
+            {info.count} reachable places
+          </p>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
