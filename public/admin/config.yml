@@ -2,7 +2,7 @@ backend:
   name: github
   repo: MrKundanGupta/northeast-wind
   branch: main
-  app_id: Ov23liN9RalJ3AvBoV2R
+  base_url: https://sveltia-cms-auth.kundankrgupta2.workers.dev
 
 media_folder: public/images
 public_folder: /images
