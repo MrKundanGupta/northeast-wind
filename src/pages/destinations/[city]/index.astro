@@ -1,0 +1,247 @@
+---
+export const prerender = true;
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PlaceCard from "../../../components/PlaceCard.astro";
+import seoDescriptions from "../../../data/seo-descriptions.json";
+
+function slugify(str: string) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+export async function getStaticPaths() {
+  const _slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const allPlaces = await getCollection("places");
+
+  const cityMap = new Map<string, typeof allPlaces>();
+  for (const p of allPlaces) {
+    const city = p.data.city;
+    if (!/^[A-Za-z]/.test(city) || city.length <= 2) continue;
+    if (!cityMap.has(city)) cityMap.set(city, []);
+    cityMap.get(city)!.push(p);
+  }
+
+  return [...cityMap.entries()].map(([city, places]) => ({
+    params: { city: _slugify(city) },
+    props: {
+      cityName: city,
+      region: places[0].data.region,
+      places,
+    },
+  }));
+}
+
+const { cityName, region, places } = Astro.props;
+
+/* ── Sort by rating descending ─────────────────────────────────────── */
+const sorted = [...places].sort(
+  (a, b) => (b.data.ratings.google_rating ?? 0) - (a.data.ratings.google_rating ?? 0),
+);
+
+const topRated = sorted.slice(0, 5);
+const rest = sorted.slice(5);
+
+/* ── Hero image: highest-rated place's first image ─────────────────── */
+const heroImage = topRated[0]?.data.images[0] ?? "";
+
+/* ── Unique categories in this city (for niche page links) ─────────── */
+const categories = [...new Set(places.map((p) => p.data.category))].sort();
+
+const title = `Best Places to Visit in ${cityName} — Northeast Explorer`;
+const seoDescription = seoDescriptions.cityHubs[slugify(cityName)] || "";
+const description = seoDescription || `Discover the ${places.length} best things to do in ${cityName}, ${region}. Top-rated attractions, waterfalls, temples, and hidden gems.`;
+---
+
+<BaseLayout title={title} description={description}>
+
+  {/* ═══ Hero — Full-bleed city banner ═══════════════════════════════ */}
+  <section class="relative h-[70vh] min-h-[480px] overflow-hidden">
+    {heroImage ? (
+      <img
+        src={heroImage}
+        alt={cityName}
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    ) : (
+      <div class="absolute inset-0 bg-gradient-to-br from-emerald-800 to-emerald-950" />
+    )}
+
+    {/* Dark gradient overlay */}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
+
+    {/* Content */}
+    <div class="relative flex h-full items-end">
+      <div class="mx-auto w-full max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+        <p class="text-sm font-semibold uppercase tracking-widest text-emerald-300">
+          {region}
+        </p>
+        <h1 class="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+          Best Places to Visit in {cityName}
+        </h1>
+        <p class="mt-4 max-w-2xl text-lg text-white/70">
+          {places.length} handpicked destinations — waterfalls, viewpoints, temples, and hidden gems.
+        </p>
+
+        {seoDescription && (
+          <p class="mt-4 max-w-2xl text-base leading-relaxed text-white/60">
+            {seoDescription}
+          </p>
+        )}
+
+        {/* Category pills */}
+        <div class="mt-6 flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <a
+              href={`/destinations/${slugify(cityName)}/${slugify(cat)}`}
+              class="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm transition hover:bg-white/20"
+            >
+              {cat}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ Top 5 Rated — Horizontal carousel ═══════════════════════════ */}
+  {topRated.length > 0 && (
+    <section class="bg-white py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-widest text-emerald-600">
+              Highest Rated
+            </p>
+            <h2 class="mt-1 text-2xl font-bold text-gray-900">
+              Top {topRated.length} in {cityName}
+            </h2>
+          </div>
+          <span class="hidden text-sm text-gray-400 sm:block">
+            Scroll &rarr;
+          </span>
+        </div>
+
+        {/* Horizontal scroll container */}
+        <div class="mt-8 -mx-4 flex gap-6 overflow-x-auto px-4 pb-4 snap-x snap-mandatory scrollbar-hide sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          {topRated.map((place, i) => (
+            <a
+              href={`/places/${place.data.id}`}
+              class="group relative flex-shrink-0 snap-start overflow-hidden rounded-2xl shadow-lg transition hover:shadow-xl"
+              style={`width: min(85vw, 380px);`}
+            >
+              {/* Image */}
+              <div class="aspect-4/3 overflow-hidden bg-gray-100">
+                {place.data.images[0] ? (
+                  <img
+                    src={place.data.images[0]}
+                    alt={place.data.name}
+                    loading={i < 2 ? "eager" : "lazy"}
+                    class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                  />
+                ) : (
+                  <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-emerald-50 to-emerald-100">
+                    <svg class="h-12 w-12 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              {/* Rank badge */}
+              <span class="absolute top-4 left-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-sm font-bold text-gray-900 shadow-sm backdrop-blur-sm">
+                {i + 1}
+              </span>
+
+              {/* Rating badge */}
+              {place.data.ratings.google_rating && (
+                <span class="absolute top-4 right-4 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-bold text-amber-600 shadow-sm backdrop-blur-sm">
+                  &#9733; {place.data.ratings.google_rating}
+                </span>
+              )}
+
+              {/* Info overlay */}
+              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent px-5 pb-5 pt-16">
+                <span class="rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
+                  {place.data.category}
+                </span>
+                <h3 class="mt-2 text-lg font-bold text-white">
+                  {place.data.name}
+                </h3>
+                <p class="mt-0.5 text-sm text-white/70">
+                  {place.data.sub_category}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ═══ All Places — Masonry grid ═══════════════════════════════════ */}
+  <section class="bg-gray-50 py-20">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900">
+        {rest.length > 0 ? `All ${places.length} Destinations` : `All Destinations in ${cityName}`}
+      </h2>
+      <p class="mt-2 mb-10 text-gray-500">
+        Every place worth visiting in {cityName}, {region}.
+      </p>
+
+      {/* CSS columns masonry */}
+      <div class="columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:mb-6 [&>*]:break-inside-avoid">
+        {(rest.length > 0 ? rest : sorted).map((place) => (
+          <PlaceCard
+            id={place.data.id}
+            name={place.data.name}
+            category={place.data.category}
+            subCategory={place.data.sub_category}
+            state={place.data.location.state}
+            googleRating={place.data.ratings.google_rating}
+            reviewsCount={place.data.ratings.google_reviews_count}
+            tags={place.data.tags}
+            image={place.data.images[0]}
+            logistics={place.data.logistics}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ Explore by Category — Internal links ═══════════════════════ */}
+  <section class="bg-white py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900">
+        Explore {cityName} by Category
+      </h2>
+      <p class="mt-2 mb-8 text-gray-500">
+        Dive deeper into specific types of attractions.
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {categories.map((cat) => {
+          const count = places.filter((p) => p.data.category === cat).length;
+          return (
+            <a
+              href={`/destinations/${slugify(cityName)}/${slugify(cat)}`}
+              class="group flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-5 transition hover:border-emerald-200 hover:bg-emerald-50"
+            >
+              <div>
+                <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700">
+                  {cat}
+                </h3>
+                <p class="mt-0.5 text-sm text-gray-500">
+                  {count} {count === 1 ? "place" : "places"}
+                </p>
+              </div>
+              <svg class="h-5 w-5 text-gray-300 group-hover:text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
