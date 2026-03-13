@@ -1,0 +1,125 @@
+---
+import AddToTripButton from "./AddToTripButton";
+
+interface LogisticsEntry {
+  hub_name: string;
+  hub_type: string;
+  distance_km: number;
+  drive_time_mins: number;
+}
+
+interface Props {
+  id: string;
+  name: string;
+  category: string;
+  subCategory: string;
+  state: string;
+  googleRating: number | null;
+  reviewsCount: string | null;
+  tags: string[];
+  image?: string;
+  logistics?: LogisticsEntry[];
+}
+
+const { id, name, category, subCategory, state, googleRating, reviewsCount, tags, image, logistics = [] } = Astro.props;
+const hasImage = image && image.length > 0;
+const cartPlace = { id, name, category, subCategory, state, googleRating, image: image ?? "", logistics };
+---
+
+<a
+  href={`/places/${id}`}
+  class="place-card group flex flex-col overflow-hidden"
+  style="background: #ffffff; border: 1px solid #E8DCC8; border-radius: 18px; box-shadow: 0 3px 20px rgba(28,18,8,0.07); transition: box-shadow 0.35s ease, transform 0.35s ease; text-decoration: none;"
+>
+  {/* Image — 16:10 aspect */}
+  <div class="relative overflow-hidden" style="aspect-ratio: 16/10; background: #EDE0C8; border-radius: 18px 18px 0 0; flex-shrink: 0;">
+    {hasImage ? (
+      <img
+        src={image}
+        alt={name}
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover"
+        style="transition: transform 0.55s cubic-bezier(0.22,1,0.36,1); will-change: transform;"
+      />
+    ) : (
+      <div class="flex h-full w-full items-center justify-center tribal-pattern" style="background-color: #E8DCC8;">
+        <svg width="56" height="48" viewBox="0 0 56 48" fill="none">
+          <path d="M28 4 L44 32 H12 Z" fill="none" stroke="#C4892A" stroke-width="1.5" opacity="0.6"/>
+          <path d="M18 14 L30 36 H6 Z"  fill="none" stroke="#1E7A47" stroke-width="1.5" opacity="0.5"/>
+          <path d="M40 10 L52 36 H28 Z" fill="none" stroke="#1E7A47" stroke-width="1.5" opacity="0.5"/>
+        </svg>
+      </div>
+    )}
+
+    {/* Persistent bottom gradient */}
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 55%; background: linear-gradient(to top, rgba(11,54,32,0.50) 0%, transparent 100%); pointer-events: none;"></div>
+
+    {/* Category badge — top left */}
+    <span class="absolute top-3 left-3 badge-forest">{category}</span>
+
+    {/* Rating badge — top right */}
+    {googleRating && (
+      <span class="absolute top-3 right-3 badge-rating flex items-center gap-1">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="#D4A843">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        {googleRating}
+      </span>
+    )}
+
+    {/* Add to trip */}
+    <AddToTripButton client:visible place={cartPlace} />
+
+    {/* Hover reveal: "View Details" bar */}
+    <div class="place-card-explore">
+      <span style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(212,168,67,0.92); font-family: 'Outfit', sans-serif;">
+        View Details
+      </span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(212,168,67,0.92)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+      </svg>
+    </div>
+  </div>
+
+  {/* Card body */}
+  <div class="flex flex-1 flex-col p-5">
+    <h2 class="place-card-title"
+        style="font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 600; color: #1C1208; line-height: 1.25; transition: color 0.2s ease;">
+      {name}
+    </h2>
+
+    <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.4rem; flex-wrap: wrap;">
+      <p style="font-size: 0.8125rem; color: #7A6555; font-family: 'Outfit', sans-serif;">{subCategory}</p>
+      <span style="color: rgba(196,137,42,0.45); font-size: 0.5rem;">◆</span>
+      <p style="font-size: 0.8125rem; color: #7A6555; font-family: 'Outfit', sans-serif;">{state}</p>
+    </div>
+
+    {reviewsCount && (
+      <p style="margin-top: 0.25rem; font-size: 0.75rem; color: #A89880; font-family: 'Outfit', sans-serif;">
+        {reviewsCount} reviews
+      </p>
+    )}
+
+    {tags.length > 0 && (
+      <div class="mt-auto flex flex-wrap gap-1.5 pt-4">
+        {tags.slice(0, 3).map((tag) => (
+          <span class="tag-pill">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+</a>
+
+<style>
+  .place-card:hover {
+    box-shadow: 0 16px 48px rgba(28,18,8,0.14) !important;
+    transform: translateY(-4px);
+  }
+  .place-card:hover .place-card-title {
+    color: #145C35 !important;
+  }
+  .place-card:hover img {
+    transform: scale(1.06) !important;
+  }
+</style>

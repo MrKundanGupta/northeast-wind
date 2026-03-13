@@ -1,0 +1,209 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="404 — Lost in the Wilderness | Axomor" description="The page you're looking for has wandered off the trail.">
+  <div class="not-found-root" style="min-height: 100vh; background: #1E3D10; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+
+    <!-- Tribal pattern overlay -->
+    <div class="tribal-pattern-dense" style="position: absolute; inset: 0; opacity: 0.18; pointer-events: none;"></div>
+
+    <!-- Animated mist layers -->
+    <div class="mist mist-1" style="position: absolute; bottom: 0; left: 0; right: 0; height: 260px; background: linear-gradient(to top, rgba(11,54,32,0.95), transparent); pointer-events: none; z-index: 1;"></div>
+    <div class="mist mist-2" style="position: absolute; bottom: 80px; left: -10%; width: 120%; height: 120px; background: radial-gradient(ellipse at center, rgba(196,137,42,0.06) 0%, transparent 70%); pointer-events: none; z-index: 1;"></div>
+
+    <!-- Gold top divider -->
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #8B5E1A, #C4892A, #D4A843, #C4892A, #8B5E1A, transparent); z-index: 2;"></div>
+
+    <!-- Mountain / forest SVG illustration -->
+    <div class="illustration" style="position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; opacity: 0.22;">
+      <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%; display:block;">
+        <!-- Far mountains -->
+        <path d="M0 320 L120 160 L240 220 L360 100 L480 180 L600 80 L720 150 L840 60 L960 140 L1080 90 L1200 170 L1320 110 L1440 180 L1440 320 Z" fill="#1a5c38" opacity="0.5"/>
+        <!-- Mid mountains -->
+        <path d="M0 320 L80 240 L180 280 L300 190 L420 260 L540 170 L660 230 L780 150 L900 210 L1020 160 L1140 220 L1260 180 L1380 240 L1440 200 L1440 320 Z" fill="#145c35" opacity="0.7"/>
+        <!-- Foreground treeline -->
+        <path d="M0 320 L30 290 L50 310 L70 270 L90 300 L110 265 L130 295 L150 260 L170 290 L200 255 L230 285 L260 250 L290 280 L320 245 L360 275 L400 240 L440 270 L480 238 L520 265 L560 242 L600 268 L640 245 L680 270 L720 248 L760 272 L800 250 L840 268 L880 245 L920 268 L960 250 L1000 270 L1040 248 L1080 265 L1120 245 L1160 268 L1200 250 L1240 268 L1280 248 L1320 268 L1360 250 L1400 268 L1440 255 L1440 320 Z" fill="#0e4a2a"/>
+      </svg>
+    </div>
+
+    <!-- Stars / fireflies -->
+    <div class="stars" style="position: absolute; inset: 0; pointer-events: none; z-index: 1;" aria-hidden="true">
+      {Array.from({ length: 28 }).map((_, i) => (
+        <div class="star" style={`
+          position: absolute;
+          width: ${Math.random() > 0.7 ? 3 : 2}px;
+          height: ${Math.random() > 0.7 ? 3 : 2}px;
+          background: ${Math.random() > 0.5 ? '#D4A843' : '#F9F4EC'};
+          border-radius: 50%;
+          top: ${5 + Math.random() * 60}%;
+          left: ${Math.random() * 100}%;
+          animation: twinkle ${2 + Math.random() * 3}s ease-in-out infinite;
+          animation-delay: ${Math.random() * 4}s;
+          opacity: ${0.4 + Math.random() * 0.6};
+        `} />
+      ))}
+    </div>
+
+    <!-- Compass rose -->
+    <div class="compass" style="position: absolute; top: 2rem; right: 3rem; opacity: 0.15; z-index: 2; animation: spin-slow 40s linear infinite;">
+      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="38" stroke="#D4A843" stroke-width="1"/>
+        <circle cx="40" cy="40" r="30" stroke="#C4892A" stroke-width="0.5" stroke-dasharray="4 4"/>
+        <path d="M40 8 L44 36 L40 40 L36 36 Z" fill="#D4A843"/>
+        <path d="M40 72 L44 44 L40 40 L36 44 Z" fill="#8B5E1A"/>
+        <path d="M8 40 L36 36 L40 40 L36 44 Z" fill="#8B5E1A"/>
+        <path d="M72 40 L44 36 L40 40 L44 44 Z" fill="#8B5E1A"/>
+        <circle cx="40" cy="40" r="4" fill="#D4A843"/>
+        <text x="40" y="6" text-anchor="middle" fill="#D4A843" font-size="6" font-family="Outfit">N</text>
+        <text x="40" y="77" text-anchor="middle" fill="#8B5E1A" font-size="6" font-family="Outfit">S</text>
+        <text x="5" y="42" text-anchor="middle" fill="#8B5E1A" font-size="6" font-family="Outfit">W</text>
+        <text x="76" y="42" text-anchor="middle" fill="#8B5E1A" font-size="6" font-family="Outfit">E</text>
+      </svg>
+    </div>
+
+    <!-- Main content -->
+    <div class="content" style="position: relative; z-index: 10; text-align: center; padding: 2rem 1.5rem; max-width: 680px;">
+
+      <!-- Eyebrow -->
+      <p class="eyebrow" style="font-family: 'Outfit', sans-serif; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #C4892A; margin-bottom: 1.5rem; animation: fade-up 0.6s ease both;">
+        Trail Lost &nbsp;·&nbsp; Path Unknown
+      </p>
+
+      <!-- 404 -->
+      <div style="position: relative; margin-bottom: 0.5rem; animation: fade-up 0.7s 0.1s ease both;">
+        <span style="
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(7rem, 22vw, 14rem);
+          font-weight: 300;
+          line-height: 0.85;
+          color: transparent;
+          -webkit-text-stroke: 1px rgba(196,137,42,0.35);
+          display: block;
+          letter-spacing: -0.02em;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          white-space: nowrap;
+          pointer-events: none;
+          user-select: none;
+        ">404</span>
+        <span style="
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(7rem, 22vw, 14rem);
+          font-weight: 300;
+          line-height: 0.85;
+          background: linear-gradient(160deg, #D4A843 0%, #C4892A 40%, #8B5E1A 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          display: block;
+          letter-spacing: -0.02em;
+          position: relative;
+        ">404</span>
+      </div>
+
+      <!-- Gold rule -->
+      <div style="height: 1px; background: linear-gradient(90deg, transparent, #C4892A, #D4A843, #C4892A, transparent); margin: 1.5rem auto; width: 200px; animation: fade-up 0.7s 0.2s ease both;"></div>
+
+      <!-- Headline -->
+      <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(1.75rem, 5vw, 2.75rem); font-weight: 400; color: #F9F4EC; line-height: 1.15; margin-bottom: 1rem; animation: fade-up 0.7s 0.25s ease both;">
+        You've wandered off the trail
+      </h1>
+
+      <!-- Body text -->
+      <p style="font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 300; color: rgba(249,244,236,0.55); line-height: 1.75; max-width: 420px; margin: 0 auto 2.5rem; animation: fade-up 0.7s 0.35s ease both;">
+        Even the most seasoned explorers lose their way in the forests of Northeast India. The page you seek isn't here — but the journey continues.
+      </p>
+
+      <!-- CTAs -->
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fade-up 0.7s 0.45s ease both;">
+        <a
+          href="/"
+          style="
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            background: linear-gradient(135deg, #C4892A, #D4A843);
+            color: #1E3D10;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            box-shadow: 0 4px 20px rgba(196,137,42,0.3);
+          "
+          onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 32px rgba(196,137,42,0.45)';this.style.filter='brightness(1.08)'"
+          onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(196,137,42,0.3)';this.style.filter=''"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          </svg>
+          Return Home
+        </a>
+
+        <a
+          href="/states"
+          style="
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            background: transparent;
+            color: #D4A843;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            border-radius: 3px;
+            border: 1px solid rgba(196,137,42,0.4);
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+            backdrop-filter: blur(8px);
+          "
+          onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='rgba(196,137,42,0.8)';this.style.background='rgba(196,137,42,0.08)'"
+          onmouseout="this.style.transform='';this.style.borderColor='rgba(196,137,42,0.4)';this.style.background='transparent'"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+          Explore States
+        </a>
+      </div>
+
+      <!-- Footer hint -->
+      <p style="margin-top: 3rem; font-family: 'Outfit', sans-serif; font-size: 0.6875rem; color: rgba(249,244,236,0.2); letter-spacing: 0.08em; animation: fade-up 0.7s 0.55s ease both;">
+        AXOMOR &nbsp;·&nbsp; NORTHEAST INDIA
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50%       { opacity: 1;   transform: scale(1.4); }
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  @keyframes mist-drift {
+    0%, 100% { transform: translateX(0); }
+    50%       { transform: translateX(3%); }
+  }
+
+  .mist-1 { animation: mist-drift 12s ease-in-out infinite; }
+  .mist-2 { animation: mist-drift 18s ease-in-out infinite reverse; }
+</style>

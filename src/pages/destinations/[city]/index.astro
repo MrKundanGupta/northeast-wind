@@ -1,0 +1,312 @@
+---
+export const prerender = true;
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PlaceCard from "../../../components/PlaceCard.astro";
+import seoDescriptions from "../../../data/seo-descriptions.json";
+import hubConnectivity from "../../../data/hub-connectivity.json";
+
+function slugify(str: string) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+export async function getStaticPaths() {
+  const _slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const allPlaces = await getCollection("places");
+  const allHubCities = await getCollection("hubCities");
+
+  // Build cityMap from regular places only
+  const cityMap = new Map<string, typeof allPlaces>();
+  for (const p of allPlaces) {
+    const city = p.data.city;
+    if (!/^[A-Za-z]/.test(city) || city.length <= 2) continue;
+    if (!cityMap.has(city)) cityMap.set(city, []);
+    cityMap.get(city)!.push(p);
+  }
+
+  // Also add cities that only appear in hubCities (so hub city pages are generated)
+  for (const h of allHubCities) {
+    const city = h.data.city;
+    if (!/^[A-Za-z]/.test(city) || city.length <= 2) continue;
+    if (!cityMap.has(city)) cityMap.set(city, []);
+  }
+
+  return [...cityMap.entries()].map(([city, places]) => {
+    // Find the hub city entry for this city (for region info)
+    const hubEntry = allHubCities.find((h) => h.data.city === city);
+    const region = places[0]?.data.region ?? hubEntry?.data.region ?? "";
+    return {
+      params: { city: _slugify(city) },
+      props: {
+        cityName: city,
+        region,
+        places,
+      },
+    };
+  });
+}
+
+const { cityName, region, places } = Astro.props;
+
+/* ── Sort by rating descending ─────────────────────────────────────── */
+const sorted = [...places].sort(
+  (a, b) => (b.data.ratings.google_rating ?? 0) - (a.data.ratings.google_rating ?? 0),
+);
+
+const topRated = sorted.slice(0, 5);
+const rest = sorted.slice(5);
+
+/* ── Hero image: highest-rated place's first image ─────────────────── */
+const heroImage = topRated[0]?.data.images[0] ?? "";
+
+/* ── Unique categories in this city (for niche page links) ─────────── */
+const categories = [...new Set(places.map((p) => p.data.category))].sort();
+
+const title = `Best Places to Visit in ${cityName} — Axomor`;
+const seoDescription = (seoDescriptions.cityHubs as Record<string, string>)[slugify(cityName)] || "";
+const description = seoDescription || `Discover the ${places.length} best things to do in ${cityName}, ${region}. Top-rated attractions, waterfalls, temples, and hidden gems.`;
+
+/* ── Hub connectivity — nearby places with road drive times ─────────── */
+const connectivity = (hubConnectivity as Record<string, {name:string;distanceKm:number;driveTimeMins:number}[]>)[slugify(cityName)] ?? [];
+
+/* ── Destinations only (regular places — hub cities are in their own collection) */
+const destinations = places;
+---
+
+<BaseLayout title={title} description={description}>
+
+  {/* ═══ Hero — Full-bleed city banner ═══════════════════════════════ */}
+  <section class="relative h-[70vh] min-h-[480px] overflow-hidden">
+    {heroImage ? (
+      <img
+        src={heroImage}
+        alt={cityName}
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    ) : (
+      <div class="absolute inset-0 tribal-pattern-dense" style="background-color: #1E3D10;" />
+    )}
+
+    {/* Dark gradient overlay */}
+    <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(11,54,32,0.92) 0%, rgba(11,54,32,0.50) 50%, rgba(11,54,32,0.20) 100%);" />
+    {/* Gold accent line at top */}
+    <div class="absolute top-0 left-0 right-0" style="height: 2px; background: linear-gradient(90deg, #8B5E1A, #C4892A, #D4A843, #C4892A, #8B5E1A);"></div>
+
+    {/* Content */}
+    <div class="relative flex h-full items-end">
+      <div class="mx-auto w-full max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+        <p style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #D4A843; margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">
+          {region}
+        </p>
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3.75rem); font-weight: 400; color: #F9F4EC; line-height: 1.1;">
+          Best Places to Visit in {cityName}
+        </h1>
+        <p style="margin-top: 1rem; max-width: 560px; font-size: 1rem; color: rgba(249,244,236,0.65); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.7;">
+          {seoDescription || `${destinations.length} handpicked destinations — waterfalls, viewpoints, temples, and hidden gems.`}
+        </p>
+
+        {/* Category pills */}
+        <div class="mt-6 flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <a
+              href={`/destinations/${slugify(cityName)}/${slugify(cat)}`}
+              style="border: 1px solid rgba(196,137,42,0.40); background: rgba(196,137,42,0.10); color: #D4A843; border-radius: 9999px; padding: 0.375rem 1rem; font-size: 0.8125rem; font-weight: 500; font-family: 'Outfit', sans-serif; text-decoration: none; backdrop-filter: blur(8px); transition: background 0.15s ease;"
+            >
+              {cat}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ Top 5 Rated — Horizontal carousel ═══════════════════════════ */}
+  {topRated.length > 0 && (
+    <section class="bg-white py-16">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-widest text-emerald-600">
+              Highest Rated
+            </p>
+            <h2 class="mt-1 text-2xl font-bold text-gray-900">
+              Top {topRated.length} in {cityName}
+            </h2>
+          </div>
+          <span class="hidden text-sm text-gray-400 sm:block">
+            Scroll &rarr;
+          </span>
+        </div>
+
+        {/* Horizontal scroll container */}
+        <div class="mt-8 -mx-4 flex gap-6 overflow-x-auto px-4 pb-4 snap-x snap-mandatory scrollbar-hide sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          {topRated.map((place, i) => (
+            <a
+              href={`/places/${place.id}`}
+              class="group relative flex-shrink-0 snap-start overflow-hidden rounded-2xl shadow-lg transition hover:shadow-xl"
+              style={`width: min(85vw, 380px);`}
+            >
+              {/* Image */}
+              <div class="aspect-4/3 overflow-hidden bg-gray-100">
+                {place.data.images[0] ? (
+                  <img
+                    src={place.data.images[0]}
+                    alt={place.data.name}
+                    loading={i < 2 ? "eager" : "lazy"}
+                    class="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                  />
+                ) : (
+                  <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-emerald-50 to-emerald-100">
+                    <svg class="h-12 w-12 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              {/* Rank badge */}
+              <span class="absolute top-4 left-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-sm font-bold text-gray-900 shadow-sm backdrop-blur-sm">
+                {i + 1}
+              </span>
+
+              {/* Rating badge */}
+              {place.data.ratings.google_rating && (
+                <span class="absolute top-4 right-4 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-bold text-amber-600 shadow-sm backdrop-blur-sm">
+                  &#9733; {place.data.ratings.google_rating}
+                </span>
+              )}
+
+              {/* Info overlay */}
+              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent px-5 pb-5 pt-16">
+                <span class="rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
+                  {place.data.category}
+                </span>
+                <h3 class="mt-2 text-lg font-bold text-white">
+                  {place.data.name}
+                </h3>
+                <p class="mt-0.5 text-sm text-white/70">
+                  {place.data.sub_category}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ═══ Hub Connectivity — drive times from this city ════════════════ */}
+  {connectivity.length > 0 && (
+    <section style="background: #F9F4EC; padding: 4rem 0; border-top: 1px solid #E8DCC8;">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div style="margin-bottom: 2rem;">
+          <p style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #C4892A; margin-bottom: 0.375rem; font-family: 'Outfit', sans-serif;">
+            Hub & Spoke
+          </p>
+          <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 500; color: #1C1208;">
+            Nearby — Drive Times from {cityName}
+          </h2>
+          <div style="width: 3rem; height: 1.5px; background: linear-gradient(90deg, #C4892A, transparent); margin-top: 0.625rem;"></div>
+        </div>
+
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {connectivity.map((item) => {
+            const hrs = Math.floor(item.driveTimeMins / 60);
+            const mins = item.driveTimeMins % 60;
+            const driveLabel = hrs > 0 ? `${hrs}h ${mins > 0 ? mins + "m" : ""}`.trim() : `${mins} min`;
+            return (
+              <div class="connectivity-row flex items-center justify-between rounded-xl px-5 py-4"
+                   style="background: #ffffff; border: 1px solid #E8DCC8; box-shadow: 0 2px 8px rgba(28,18,8,0.05);">
+                <div class="flex items-center gap-3">
+                  {/* Road icon */}
+                  <div style="flex-shrink: 0; width: 32px; height: 32px; background: #F2EAD6; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C4892A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 17l6-12 6 12"/><path d="M9 13h6"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p style="font-size: 0.875rem; font-weight: 500; color: #1C1208; font-family: 'Outfit', sans-serif;">{item.name}</p>
+                    <p style="font-size: 0.75rem; color: #7A6555; font-family: 'Outfit', sans-serif;">{item.distanceKm} km by road</p>
+                  </div>
+                </div>
+                <span style="font-size: 0.75rem; font-weight: 600; color: #145C35; font-family: 'Outfit', sans-serif; background: #F2EAD6; padding: 0.2rem 0.625rem; border-radius: 9999px; white-space: nowrap;">
+                  {driveLabel}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {/* ═══ All Places — Masonry grid ═══════════════════════════════════ */}
+  <section style="background: #F2EAD6; padding: 5rem 0;">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div style="margin-bottom: 2.5rem;">
+        <p style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #C4892A; margin-bottom: 0.375rem; font-family: 'Outfit', sans-serif;">
+          All Destinations
+        </p>
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 500; color: #1C1208;">
+          {destinations.length > 0 ? `${destinations.length} Places in ${cityName}` : `Destinations in ${cityName}`}
+        </h2>
+        <div style="width: 3rem; height: 1.5px; background: linear-gradient(90deg, #C4892A, transparent); margin-top: 0.625rem;"></div>
+      </div>
+
+      {/* CSS columns masonry */}
+      <div class="columns-1 gap-6 sm:columns-2 lg:columns-3 [&>*]:mb-6 [&>*]:break-inside-avoid">
+        {sorted.map((place) => (
+          <PlaceCard
+            id={place.id}
+            name={place.data.name}
+            category={place.data.category}
+            subCategory={place.data.sub_category}
+            state={place.data.location.state}
+            googleRating={place.data.ratings.google_rating}
+            reviewsCount={place.data.ratings.google_reviews_count}
+            tags={place.data.tags}
+            image={place.data.images[0]}
+            logistics={place.data.logistics}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ═══ Explore by Category — Internal links ═══════════════════════ */}
+  <section class="bg-white py-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900">
+        Explore {cityName} by Category
+      </h2>
+      <p class="mt-2 mb-8 text-gray-500">
+        Dive deeper into specific types of attractions.
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {categories.map((cat) => {
+          const count = places.filter((p) => p.data.category === cat).length;
+          return (
+            <a
+              href={`/destinations/${slugify(cityName)}/${slugify(cat)}`}
+              class="group flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 p-5 transition hover:border-emerald-200 hover:bg-emerald-50"
+            >
+              <div>
+                <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700">
+                  {cat}
+                </h3>
+                <p class="mt-0.5 text-sm text-gray-500">
+                  {count} {count === 1 ? "place" : "places"}
+                </p>
+              </div>
+              <svg class="h-5 w-5 text-gray-300 group-hover:text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

@@ -1,0 +1,107 @@
+import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
+
+const placeSchema = z.object({
+  name: z.string(),
+  category: z.string(),
+  sub_category: z.string(),
+  tags: z.array(z.string()),
+  high_intent_motivation: z.string(),
+
+  ratings: z.object({
+    google_rating: z.number().nullable().default(null),
+    google_reviews_count: z.string().nullable().default(null),
+    our_rating: z.number().nullable().default(null),
+  }),
+
+  entry_fees: z.object({
+    indian_inr: z.string().default(""),
+    foreigner_inr: z.string().default(""),
+    special_entry_notes: z.string().default(""),
+  }),
+
+  location: z.object({
+    lat: z.number(),
+    lng: z.number(),
+    address: z.string(),
+    state: z.string(),
+  }),
+
+  permit_requirements: z.object({
+    ilp_required: z.boolean(),
+    pap_required: z.boolean(),
+    permit_details: z.string(),
+  }),
+
+  visiting_hours: z.object({
+    open_time: z.string(),
+    close_time: z.string(),
+    closed_days: z.array(z.string()),
+    notes: z.string(),
+  }),
+
+  seasonality: z.object({
+    best_months: z.array(z.string()),
+    peak_events: z.array(z.string()),
+  }),
+
+  logistics: z.array(
+    z.object({
+      hub_name: z.string(),
+      hub_type: z.string(),
+      distance_km: z.number(),
+      drive_time_mins: z.number(),
+      best_time_to_leave: z.string().optional(),
+    })
+  ),
+
+  seo: z.object({
+    meta_title: z.string(),
+    meta_description: z.string(),
+    schema_org_type: z.string(),
+  }),
+
+  images: z.array(z.string()),
+
+  /* ── Hub & Spoke SEO fields ─────────────────────────── */
+  city: z.string(),
+  region: z.string(),
+  map_location: z.object({
+    lat: z.number(),
+    lng: z.number(),
+    Maps_url: z.string().url(),
+  }),
+  hub_images: z.array(z.string()).default([]),
+  seo_tags: z.array(z.string()),
+});
+
+const places = defineCollection({
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/places" }),
+  schema: placeSchema,
+});
+
+const hubCitySchema = placeSchema.extend({
+  ratings: z.object({
+    google_rating: z.number().nullable().optional(),
+    google_reviews_count: z.string().nullable().optional(),
+    our_rating: z.number().nullable().default(null),
+  }),
+  entry_fees: z.object({
+    indian_inr: z.string().default(""),
+    foreigner_inr: z.string().default(""),
+    special_entry_notes: z.string().default(""),
+  }).optional(),
+  visiting_hours: z.object({
+    open_time: z.string(),
+    close_time: z.string(),
+    closed_days: z.array(z.string()),
+    notes: z.string(),
+  }).optional(),
+});
+
+const hubCities = defineCollection({
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/hub-cities" }),
+  schema: hubCitySchema,
+});
+
+export const collections = { places, hubCities };

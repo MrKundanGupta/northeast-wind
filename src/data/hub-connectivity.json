@@ -1,0 +1,387 @@
+{
+  "guwahati": [
+    {
+      "name": "Kamakhya Temple",
+      "distanceKm": 8,
+      "driveTimeMins": 22
+    },
+    {
+      "name": "Umananda Island",
+      "distanceKm": 4,
+      "driveTimeMins": 25
+    },
+    {
+      "name": "Brahmaputra River Cruise",
+      "distanceKm": 2,
+      "driveTimeMins": 8
+    },
+    {
+      "name": "Deepor Beel",
+      "distanceKm": 12,
+      "driveTimeMins": 30
+    },
+    {
+      "name": "Pobitora Wildlife",
+      "distanceKm": 55,
+      "driveTimeMins": 80
+    },
+    {
+      "name": "Hajo",
+      "distanceKm": 32,
+      "driveTimeMins": 55
+    }
+  ],
+  "kaziranga": [
+    {
+      "name": "Kaziranga National Park",
+      "distanceKm": 5,
+      "driveTimeMins": 12
+    },
+    {
+      "name": "Kakochang Waterfall",
+      "distanceKm": 25,
+      "driveTimeMins": 40
+    },
+    {
+      "name": "Deopahar Ruins",
+      "distanceKm": 30,
+      "driveTimeMins": 50
+    }
+  ],
+  "sivasagar": [
+    {
+      "name": "Rang Ghar",
+      "distanceKm": 5,
+      "driveTimeMins": 12
+    },
+    {
+      "name": "Talatal Ghar",
+      "distanceKm": 8,
+      "driveTimeMins": 18
+    },
+    {
+      "name": "Charaideo Maidam",
+      "distanceKm": 28,
+      "driveTimeMins": 45
+    }
+  ],
+  "majuli": [
+    {
+      "name": "Kamalabari Satra",
+      "distanceKm": 12,
+      "driveTimeMins": 20
+    },
+    {
+      "name": "Auniati Satra",
+      "distanceKm": 8,
+      "driveTimeMins": 15
+    }
+  ],
+  "shillong": [
+    {
+      "name": "Ward's Lake",
+      "distanceKm": 1,
+      "driveTimeMins": 5
+    },
+    {
+      "name": "Don Bosco Museum",
+      "distanceKm": 2,
+      "driveTimeMins": 8
+    },
+    {
+      "name": "Shillong Peak",
+      "distanceKm": 10,
+      "driveTimeMins": 25
+    },
+    {
+      "name": "Elephant Falls",
+      "distanceKm": 12,
+      "driveTimeMins": 30
+    },
+    {
+      "name": "Laitlum Canyon",
+      "distanceKm": 25,
+      "driveTimeMins": 50
+    },
+    {
+      "name": "Umiam Lake",
+      "distanceKm": 17,
+      "driveTimeMins": 35
+    },
+    {
+      "name": "Mawphlang Sacred Grove",
+      "distanceKm": 25,
+      "driveTimeMins": 45
+    }
+  ],
+  "cherrapunji": [
+    {
+      "name": "Nohkalikai Falls",
+      "distanceKm": 7,
+      "driveTimeMins": 15
+    },
+    {
+      "name": "Seven Sisters Falls",
+      "distanceKm": 10,
+      "driveTimeMins": 20
+    },
+    {
+      "name": "Wei Sawdong Falls",
+      "distanceKm": 15,
+      "driveTimeMins": 30
+    },
+    {
+      "name": "Mawsmai Cave",
+      "distanceKm": 6,
+      "driveTimeMins": 12
+    },
+    {
+      "name": "Arwah Cave",
+      "distanceKm": 8,
+      "driveTimeMins": 18
+    },
+    {
+      "name": "Double Decker Living Root Bridge",
+      "distanceKm": 55,
+      "driveTimeMins": 90
+    }
+  ],
+  "jowai": [
+    {
+      "name": "Krang Suri Falls",
+      "distanceKm": 30,
+      "driveTimeMins": 50
+    },
+    {
+      "name": "Phe Phe Fall",
+      "distanceKm": 20,
+      "driveTimeMins": 35
+    },
+    {
+      "name": "Nartiang Monoliths",
+      "distanceKm": 25,
+      "driveTimeMins": 40
+    }
+  ],
+  "dawki": [
+    {
+      "name": "Shnongpdeng",
+      "distanceKm": 5,
+      "driveTimeMins": 10
+    },
+    {
+      "name": "Mawlynnong",
+      "distanceKm": 18,
+      "driveTimeMins": 35
+    }
+  ],
+  "mawlynnong": [
+    {
+      "name": "Riwai Living Root Bridge",
+      "distanceKm": 1,
+      "driveTimeMins": 5
+    }
+  ],
+  "tawang": [
+    {
+      "name": "Tawang Monastery",
+      "distanceKm": 2,
+      "driveTimeMins": 8
+    },
+    {
+      "name": "Tawang War Memorial",
+      "distanceKm": 1,
+      "driveTimeMins": 5
+    },
+    {
+      "name": "Nuranang Falls",
+      "distanceKm": 40,
+      "driveTimeMins": 75
+    },
+    {
+      "name": "Bumla Pass",
+      "distanceKm": 37,
+      "driveTimeMins": 90
+    },
+    {
+      "name": "Madhuri Lake",
+      "distanceKm": 42,
+      "driveTimeMins": 100
+    },
+    {
+      "name": "Sela Lake",
+      "distanceKm": 78,
+      "driveTimeMins": 150
+    }
+  ],
+  "dirang": [
+    {
+      "name": "Sangti Valley",
+      "distanceKm": 10,
+      "driveTimeMins": 20
+    },
+    {
+      "name": "Dirang Dzong",
+      "distanceKm": 3,
+      "driveTimeMins": 8
+    }
+  ],
+  "kohima": [
+    {
+      "name": "Kohima War Cemetery",
+      "distanceKm": 1,
+      "driveTimeMins": 5
+    },
+    {
+      "name": "Kisama Heritage Village",
+      "distanceKm": 12,
+      "driveTimeMins": 20
+    },
+    {
+      "name": "Khonoma Village",
+      "distanceKm": 20,
+      "driveTimeMins": 35
+    },
+    {
+      "name": "Dzukou Valley",
+      "distanceKm": 30,
+      "driveTimeMins": 60
+    },
+    {
+      "name": "Japfu Peak",
+      "distanceKm": 15,
+      "driveTimeMins": 35
+    }
+  ],
+  "imphal": [
+    {
+      "name": "Kangla Fort",
+      "distanceKm": 3,
+      "driveTimeMins": 10
+    },
+    {
+      "name": "Ima Keithel",
+      "distanceKm": 2,
+      "driveTimeMins": 8
+    },
+    {
+      "name": "Loktak Lake",
+      "distanceKm": 48,
+      "driveTimeMins": 70
+    },
+    {
+      "name": "Keibul Lamjao National Park",
+      "distanceKm": 52,
+      "driveTimeMins": 75
+    }
+  ],
+  "ukhrul": [
+    {
+      "name": "Shirui Lily Peak",
+      "distanceKm": 12,
+      "driveTimeMins": 25
+    },
+    {
+      "name": "Khangkhui Cave",
+      "distanceKm": 8,
+      "driveTimeMins": 18
+    }
+  ],
+  "gangtok": [
+    {
+      "name": "Tsomgo Lake",
+      "distanceKm": 40,
+      "driveTimeMins": 75
+    },
+    {
+      "name": "Nathu La Pass",
+      "distanceKm": 54,
+      "driveTimeMins": 90
+    },
+    {
+      "name": "Rumtek Monastery",
+      "distanceKm": 24,
+      "driveTimeMins": 40
+    },
+    {
+      "name": "Enchey Monastery",
+      "distanceKm": 3,
+      "driveTimeMins": 10
+    }
+  ],
+  "pelling": [
+    {
+      "name": "Pemayangtse Monastery",
+      "distanceKm": 2,
+      "driveTimeMins": 8
+    },
+    {
+      "name": "Rabdentse Ruins",
+      "distanceKm": 5,
+      "driveTimeMins": 12
+    },
+    {
+      "name": "Khecheopalri Lake",
+      "distanceKm": 28,
+      "driveTimeMins": 50
+    },
+    {
+      "name": "Yuksom",
+      "distanceKm": 42,
+      "driveTimeMins": 70
+    }
+  ],
+  "champhai": [
+    {
+      "name": "Rih Dil Lake",
+      "distanceKm": 8,
+      "driveTimeMins": 20
+    },
+    {
+      "name": "Murlen National Park",
+      "distanceKm": 60,
+      "driveTimeMins": 100
+    }
+  ],
+  "wokha": [
+    {
+      "name": "Doyang Reservoir",
+      "distanceKm": 15,
+      "driveTimeMins": 30
+    },
+    {
+      "name": "Mount Tiyi",
+      "distanceKm": 12,
+      "driveTimeMins": 25
+    }
+  ],
+  "udaipur": [
+    {
+      "name": "Tripura Sundari Temple",
+      "distanceKm": 3,
+      "driveTimeMins": 8
+    },
+    {
+      "name": "Neermahal",
+      "distanceKm": 25,
+      "driveTimeMins": 40
+    }
+  ],
+  "agartala": [
+    {
+      "name": "Ujjayanta Palace",
+      "distanceKm": 2,
+      "driveTimeMins": 8
+    },
+    {
+      "name": "Neermahal",
+      "distanceKm": 53,
+      "driveTimeMins": 75
+    },
+    {
+      "name": "Unakoti Rock Carvings",
+      "distanceKm": 178,
+      "driveTimeMins": 240
+    }
+  ]
+}
