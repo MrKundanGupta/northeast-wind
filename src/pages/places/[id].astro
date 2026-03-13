@@ -91,21 +91,25 @@ const jsonLd = {
     <!-- Info cards -->
     <div class="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <!-- Visiting Hours -->
-      <div class="rounded-lg border border-gray-200 bg-white p-4">
-        <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Visiting Hours</h3>
-        <p class="text-lg font-medium">{d.visiting_hours.open_time} — {d.visiting_hours.close_time}</p>
-        <p class="mt-1 text-sm text-gray-500">{d.visiting_hours.notes}</p>
-      </div>
+      {d.visiting_hours && (
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Visiting Hours</h3>
+          <p class="text-lg font-medium">{d.visiting_hours.open_time} — {d.visiting_hours.close_time}</p>
+          <p class="mt-1 text-sm text-gray-500">{d.visiting_hours.notes}</p>
+        </div>
+      )}
 
       <!-- Entry Fees -->
-      <div class="rounded-lg border border-gray-200 bg-white p-4">
-        <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Entry Fees</h3>
-        <p class="text-sm"><span class="font-medium">Indian:</span> {d.entry_fees.indian_inr}</p>
-        <p class="text-sm"><span class="font-medium">Foreigner:</span> {d.entry_fees.foreigner_inr}</p>
-        {d.entry_fees.special_entry_notes && (
-          <p class="mt-1 text-xs text-gray-500">{d.entry_fees.special_entry_notes}</p>
-        )}
-      </div>
+      {d.entry_fees && (
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+          <h3 class="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">Entry Fees</h3>
+          <p class="text-sm"><span class="font-medium">Indian:</span> {d.entry_fees.indian_inr}</p>
+          <p class="text-sm"><span class="font-medium">Foreigner:</span> {d.entry_fees.foreigner_inr}</p>
+          {d.entry_fees.special_entry_notes && (
+            <p class="mt-1 text-xs text-gray-500">{d.entry_fees.special_entry_notes}</p>
+          )}
+        </div>
+      )}
 
       <!-- Permit -->
       <div class="rounded-lg border border-gray-200 bg-white p-4">
