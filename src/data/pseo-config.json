@@ -1,0 +1,96 @@
+{
+  "cities": [
+    { "name": "Guwahati", "slug": "guwahati", "state": "Assam", "stateSlug": "assam", "region": "Northeast India", "lat": 26.1445, "lng": 91.7362 },
+    { "name": "Shillong", "slug": "shillong", "state": "Meghalaya", "stateSlug": "meghalaya", "region": "Northeast India", "lat": 25.5788, "lng": 91.8933 },
+    { "name": "Gangtok", "slug": "gangtok", "state": "Sikkim", "stateSlug": "sikkim", "region": "Northeast India", "lat": 27.3389, "lng": 88.6065 },
+    { "name": "Tawang", "slug": "tawang", "state": "Arunachal Pradesh", "stateSlug": "arunachal-pradesh", "region": "Northeast India", "lat": 27.586, "lng": 91.8594 },
+    { "name": "Imphal", "slug": "imphal", "state": "Manipur", "stateSlug": "manipur", "region": "Northeast India", "lat": 24.817, "lng": 93.9368 },
+    { "name": "Aizawl", "slug": "aizawl", "state": "Mizoram", "stateSlug": "mizoram", "region": "Northeast India", "lat": 23.7271, "lng": 92.7176 },
+    { "name": "Kohima", "slug": "kohima", "state": "Nagaland", "stateSlug": "nagaland", "region": "Northeast India", "lat": 25.6751, "lng": 94.1086 },
+    { "name": "Agartala", "slug": "agartala", "state": "Tripura", "stateSlug": "tripura", "region": "Northeast India", "lat": 23.8315, "lng": 91.2868 },
+    { "name": "Cherrapunji", "slug": "cherrapunji", "state": "Meghalaya", "stateSlug": "meghalaya", "region": "Northeast India", "lat": 25.27, "lng": 91.732 },
+    { "name": "Tezpur", "slug": "tezpur", "state": "Assam", "stateSlug": "assam", "region": "Northeast India", "lat": 26.6338, "lng": 92.7926 },
+    { "name": "Namchi", "slug": "namchi", "state": "Sikkim", "stateSlug": "sikkim", "region": "Northeast India", "lat": 27.1667, "lng": 88.35 },
+    { "name": "Pelling", "slug": "pelling", "state": "Sikkim", "stateSlug": "sikkim", "region": "Northeast India", "lat": 27.3, "lng": 88.2333 },
+    { "name": "Dimapur", "slug": "dimapur", "state": "Nagaland", "stateSlug": "nagaland", "region": "Northeast India", "lat": 25.9042, "lng": 93.727 },
+    { "name": "Itanagar", "slug": "itanagar", "state": "Arunachal Pradesh", "stateSlug": "arunachal-pradesh", "region": "Northeast India", "lat": 27.0844, "lng": 93.6053 },
+    { "name": "Ziro", "slug": "ziro", "state": "Arunachal Pradesh", "stateSlug": "arunachal-pradesh", "region": "Northeast India", "lat": 27.5462, "lng": 93.827 },
+    { "name": "Ravangla", "slug": "ravangla", "state": "Sikkim", "stateSlug": "sikkim", "region": "Northeast India", "lat": 27.3088, "lng": 88.3648 },
+    { "name": "Jorhat", "slug": "jorhat", "state": "Assam", "stateSlug": "assam", "region": "Northeast India", "lat": 26.7509, "lng": 94.2037 },
+    { "name": "Kaziranga", "slug": "kaziranga", "state": "Assam", "stateSlug": "assam", "region": "Northeast India", "lat": 26.5775, "lng": 93.1711 }
+  ],
+  "categories": [
+    {
+      "slug": "tourist-places",
+      "label": "Tourist Places",
+      "source": "mdx",
+      "mdxCategories": "all",
+      "googlePlaceType": null,
+      "schemaType": "TouristAttraction",
+      "metaTitleTemplate": "Top {count} {label} in {city}, {state} ({monthYear} Guide)",
+      "h1Template": "The Best {label} in {city}, {state}",
+      "metaDescriptionTemplate": "Looking for the best {label} in {city}? Discover {count} top-rated spots, local favorites, and hidden gems for your next trip to {state}.",
+      "introTemplate": "{city} in {state} is a gateway to Northeast India's most stunning landscapes and cultural landmarks. Whether you're drawn to ancient temples, wildlife sanctuaries, or breathtaking viewpoints, {city} delivers an authentic experience that few destinations can match. The city blends heritage with natural beauty — from bustling local markets to serene hilltop retreats. We've curated the top {count} tourist places that locals and seasoned travelers recommend most. Each listing includes ratings, entry fees, and practical details so you can plan your {city} itinerary with confidence."
+    },
+    {
+      "slug": "sightseeing",
+      "label": "Sightseeing Spots",
+      "source": "mdx",
+      "mdxCategories": ["Waterfall", "Viewpoint / Passes", "Scenic Spot", "Lake", "Lake / Nature", "Mountain Peak", "Park", "Garden"],
+      "googlePlaceType": null,
+      "schemaType": "TouristAttraction",
+      "metaTitleTemplate": "Top {count} {label} in {city}, {state} ({monthYear} Guide)",
+      "h1Template": "The Best {label} in {city}, {state}",
+      "metaDescriptionTemplate": "Looking for the best {label} in {city}? Discover {count} top-rated spots, local favorites, and hidden gems for your next trip to {state}.",
+      "introTemplate": "From cascading waterfalls to panoramic mountain viewpoints, {city} is packed with sightseeing experiences that stay with you long after you leave. Nestled in {state}, this destination offers scenic spots that range from tranquil lakes to dramatic valley overlooks. Whether you're a photographer chasing golden-hour light or a traveler seeking that perfect picnic spot, {city} has you covered. We've rounded up {count} sightseeing spots that showcase the best of the region's natural beauty — complete with directions, ratings, and tips from travelers who've been there."
+    },
+    {
+      "slug": "cafes",
+      "label": "Cafes",
+      "source": "google",
+      "mdxCategories": null,
+      "googlePlaceType": "cafe",
+      "schemaType": "LocalBusiness",
+      "metaTitleTemplate": "Top {count} {label} in {city}, {state} ({monthYear} Guide)",
+      "h1Template": "The Best {label} in {city}, {state}",
+      "metaDescriptionTemplate": "Looking for the best {label} in {city}? Discover {count} top-rated spots, local favorites, and hidden gems for your next trip to {state}.",
+      "introTemplate": "The cafe culture in {city} is thriving, with cozy corners and specialty brews popping up across the city. Whether you need a quiet spot for remote work, a place to catch up with friends, or just a perfectly brewed cup of local tea or single-origin coffee, {city}'s cafes deliver. From hilltop cafes with panoramic views to downtown espresso bars, the scene here reflects {state}'s unique blend of tradition and modernity. Below you'll find {count} cafes that locals swear by — with ratings, addresses, and what makes each one worth a visit."
+    },
+    {
+      "slug": "eateries",
+      "label": "Eateries",
+      "source": "google",
+      "mdxCategories": null,
+      "googlePlaceType": "restaurant",
+      "schemaType": "LocalBusiness",
+      "metaTitleTemplate": "Top {count} {label} in {city}, {state} ({monthYear} Guide)",
+      "h1Template": "The Best {label} in {city}, {state}",
+      "metaDescriptionTemplate": "Looking for the best {label} in {city}? Discover {count} top-rated spots, local favorites, and hidden gems for your next trip to {state}.",
+      "introTemplate": "Eating your way through {city} is one of the best ways to experience {state}. The food scene here blends indigenous flavors with pan-Indian and international influences — think smoky grilled meats, fresh river fish, hearty thalis, and street food you won't find anywhere else. Whether you're craving a sit-down meal at a top-rated restaurant or a quick bite at a beloved local joint, {city} has options for every budget and palate. Here are {count} eateries that travelers and locals consistently rate as the best."
+    },
+    {
+      "slug": "sweet-shops",
+      "label": "Sweet Shops",
+      "source": "google",
+      "mdxCategories": null,
+      "googlePlaceType": "bakery",
+      "schemaType": "LocalBusiness",
+      "metaTitleTemplate": "Top {count} {label} in {city}, {state} ({monthYear} Guide)",
+      "h1Template": "The Best {label} in {city}, {state}",
+      "metaDescriptionTemplate": "Looking for the best {label} in {city}? Discover {count} top-rated spots, local favorites, and hidden gems for your next trip to {state}.",
+      "introTemplate": "No trip to {city} is complete without sampling the local sweets and baked goods. {state} has a rich tradition of confections — from traditional mithai and rice-based desserts to modern bakeries serving fresh cakes and pastries. Whether you're picking up a box of sweets as a gift or treating yourself to a warm pastry with your afternoon chai, {city}'s sweet shops won't disappoint. We've listed {count} of the best-rated spots where you can satisfy your sweet tooth."
+    },
+    {
+      "slug": "lounges",
+      "label": "Lounges",
+      "source": "google",
+      "mdxCategories": null,
+      "googlePlaceType": "bar",
+      "schemaType": "LocalBusiness",
+      "metaTitleTemplate": "Top {count} {label} in {city}, {state} ({monthYear} Guide)",
+      "h1Template": "The Best {label} in {city}, {state}",
+      "metaDescriptionTemplate": "Looking for the best {label} in {city}? Discover {count} top-rated spots, local favorites, and hidden gems for your next trip to {state}.",
+      "introTemplate": "When the sun sets over {city}, the nightlife comes alive in its lounges and bars. {state}'s capital offers a mix of rooftop lounges with mountain views, cozy pubs with live music, and upscale bars serving craft cocktails. Whether you're looking for a chill vibe after a day of sightseeing or a lively spot for a night out, {city}'s lounge scene has something for every mood. Here are {count} top-rated lounges that travelers and locals love — with ambience details, ratings, and what to expect."
+    }
+  ]
+}

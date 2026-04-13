@@ -310,10 +310,30 @@ export default config({
         }),
 
         // ── Hub & Spoke SEO ────────────────────────────
-        city: fields.text({
+        city: fields.select({
           label: "City",
-          description: "e.g. Guwahati",
-          validation: { isRequired: true },
+          description: "Links this place to a Near Me city page",
+          options: [
+            { label: "Guwahati", value: "Guwahati" },
+            { label: "Shillong", value: "Shillong" },
+            { label: "Gangtok", value: "Gangtok" },
+            { label: "Tawang", value: "Tawang" },
+            { label: "Imphal", value: "Imphal" },
+            { label: "Aizawl", value: "Aizawl" },
+            { label: "Kohima", value: "Kohima" },
+            { label: "Agartala", value: "Agartala" },
+            { label: "Cherrapunji", value: "Cherrapunji" },
+            { label: "Tezpur", value: "Tezpur" },
+            { label: "Namchi", value: "Namchi" },
+            { label: "Pelling", value: "Pelling" },
+            { label: "Dimapur", value: "Dimapur" },
+            { label: "Itanagar", value: "Itanagar" },
+            { label: "Ziro", value: "Ziro" },
+            { label: "Ravangla", value: "Ravangla" },
+            { label: "Jorhat", value: "Jorhat" },
+            { label: "Kaziranga", value: "Kaziranga" },
+          ],
+          defaultValue: "Guwahati",
         }),
         region: fields.text({
           label: "Region",

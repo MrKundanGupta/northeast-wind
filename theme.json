@@ -1,0 +1,104 @@
+{
+  "name": "Northeast Explorer — Dark Glassmorphism",
+  "description": "Extracted from LifeTrip travel UI reference (5 progressive stages)",
+
+  "colors": {
+    "background": {
+      "deep":    "#0f0d2e",
+      "base":    "#1a1744",
+      "raised":  "#252352",
+      "surface": "#2f2b6b"
+    },
+    "glass": {
+      "subtle":  "rgba(255, 255, 255, 0.05)",
+      "default": "rgba(255, 255, 255, 0.08)",
+      "hover":   "rgba(255, 255, 255, 0.12)",
+      "active":  "rgba(255, 255, 255, 0.16)"
+    },
+    "primary": {
+      "DEFAULT": "#a855f7",
+      "dark":    "#7c3aed",
+      "light":   "#c084fc",
+      "faint":   "rgba(168, 85, 247, 0.15)"
+    },
+    "cta": {
+      "from": "#d946ef",
+      "to":   "#a855f7",
+      "pink": "#ec4899"
+    },
+    "text": {
+      "primary":   "#ffffff",
+      "secondary": "rgba(255, 255, 255, 0.70)",
+      "muted":     "rgba(255, 255, 255, 0.40)",
+      "faint":     "rgba(255, 255, 255, 0.25)"
+    },
+    "border": {
+      "subtle":  "rgba(255, 255, 255, 0.08)",
+      "default": "rgba(255, 255, 255, 0.12)",
+      "active":  "rgba(168, 85, 247, 0.50)"
+    },
+    "semantic": {
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error":   "#ef4444",
+      "info":    "#3b82f6"
+    }
+  },
+
+  "borderRadius": {
+    "xs":   "8px",
+    "sm":   "12px",
+    "md":   "14px",
+    "lg":   "20px",
+    "xl":   "24px",
+    "pill": "9999px"
+  },
+
+  "shadows": {
+    "card":        "0 8px 32px rgba(0, 0, 0, 0.40)",
+    "card-hover":  "0 12px 40px rgba(0, 0, 0, 0.50)",
+    "glow-purple": "0 0 24px rgba(168, 85, 247, 0.30)",
+    "glow-pink":   "0 0 24px rgba(217, 70, 239, 0.30)",
+    "inner-glass": "inset 0 1px 0 rgba(255, 255, 255, 0.06)",
+    "soft":        "0 2px 8px rgba(0, 0, 0, 0.25)"
+  },
+
+  "glassmorphism": {
+    "backdropBlur":     "16px",
+    "backdropSaturate": "180%",
+    "background":       "rgba(255, 255, 255, 0.08)",
+    "border":           "1px solid rgba(255, 255, 255, 0.12)"
+  },
+
+  "typography": {
+    "fontFamily": "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "scale": {
+      "display":  { "size": "28px", "weight": 700, "lineHeight": 1.2, "letterSpacing": "-0.02em" },
+      "title":    { "size": "22px", "weight": 700, "lineHeight": 1.3, "letterSpacing": "-0.01em" },
+      "heading":  { "size": "18px", "weight": 600, "lineHeight": 1.4, "letterSpacing": "0" },
+      "body":     { "size": "15px", "weight": 400, "lineHeight": 1.6, "letterSpacing": "0" },
+      "meta":     { "size": "13px", "weight": 500, "lineHeight": 1.5, "letterSpacing": "0" },
+      "caption":  { "size": "11px", "weight": 500, "lineHeight": 1.4, "letterSpacing": "0.05em", "textTransform": "uppercase" }
+    }
+  },
+
+  "spacing": {
+    "unit": "4px",
+    "multipliers": {
+      "card-padding":    6,
+      "section-gap":     5,
+      "element-gap":     3,
+      "tight":           2,
+      "page-inline":     5,
+      "page-block":     10
+    },
+    "computed": {
+      "card-padding":  "24px",
+      "section-gap":   "20px",
+      "element-gap":   "12px",
+      "tight":          "8px",
+      "page-inline":   "20px",
+      "page-block":    "40px"
+    }
+  }
+}
