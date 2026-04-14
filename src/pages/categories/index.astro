@@ -29,100 +29,78 @@ function stateSlug(s: string) {
 >
 
   {/* ── Page Header ─────────────────────────────────────── */}
-  <section style="background: #1E3D10; position: relative; padding: 5rem 0 4rem; overflow: hidden;" class="tribal-pattern-dense">
+  <section style="background: #1E3D10; position: relative; padding: 3.5rem 0 3rem; overflow: hidden;" class="tribal-pattern-dense">
     <div style="position: absolute; top: -80px; left: -80px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(196,137,42,0.12) 0%, transparent 65%); pointer-events: none;"></div>
-    <div style="height: 2px; background: linear-gradient(90deg, #6B4A12, #8B5E1A, #C4892A, #D4A843, #C4892A, #8B5E1A, #6B4A12); margin-bottom: 3.5rem;"></div>
+    <div style="height: 2px; background: linear-gradient(90deg, #6B4A12, #8B5E1A, #C4892A, #D4A843, #C4892A, #8B5E1A, #6B4A12); margin-bottom: 2.5rem;"></div>
 
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative" style="z-index: 1;">
-      <div class="flex items-center gap-3 mb-5">
+      <div class="flex items-center gap-3 mb-4">
         <div style="width: 2rem; height: 1px; background: linear-gradient(90deg, transparent, #D4A843);"></div>
         <p style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #D4A843; font-family: 'Outfit', sans-serif;">
           By Interest
         </p>
       </div>
-      <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2.25rem, 6vw, 4rem); font-weight: 300; color: #F9F4EC; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 1.25rem;">
+      <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 300; color: #F9F4EC; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1rem;">
         Find Places<br /><em style="font-style: italic; color: #D4A843; font-weight: 400;">by Category</em>
       </h1>
-      <div style="display: flex; align-items: center; gap: 0.875rem; margin-bottom: 1.25rem;">
+      <div style="display: flex; align-items: center; gap: 0.875rem; margin-bottom: 1rem;">
         <div style="width: 3rem; height: 1.5px; background: linear-gradient(90deg, #C4892A, #D4A843);"></div>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="rgba(212,168,67,0.75)">
-          <path d="M12 2L14 9L21 12L14 15L12 22L10 15L3 12L10 9Z"/>
-        </svg>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="rgba(212,168,67,0.75)"><path d="M12 2L14 9L21 12L14 15L12 22L10 15L3 12L10 9Z"/></svg>
         <div style="width: 3rem; height: 1.5px; background: linear-gradient(90deg, #D4A843, #C4892A);"></div>
       </div>
-      <p style="font-size: 1rem; color: rgba(249,244,236,0.58); font-family: 'Outfit', sans-serif; font-weight: 300; max-width: 520px; line-height: 1.75;">
+      <p style="font-size: 0.9375rem; color: rgba(249,244,236,0.58); font-family: 'Outfit', sans-serif; font-weight: 300; max-width: 480px; line-height: 1.75;">
         What draws you? Whether it's ancient temples, untamed wildlife, hidden waterfalls, or high-altitude adventures — find it here.
       </p>
     </div>
   </section>
 
   {/* ── Category Cards ──────────────────────────────────── */}
-  <section style="background: #F2EAD6; padding: 5rem 0 6rem;">
+  <section style="background: #F2EAD6; padding: 3.5rem 0 5rem;">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {CATEGORIES.map((cat, i) => {
           const count = countMap.get(cat.slug) ?? 0;
           return (
             <a
               href={`/categories/${cat.slug}`}
               class="cat-card reveal"
-              style={`animation-delay: ${i * 0.08}s; position: relative; display: block; border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; text-decoration: none; box-shadow: 0 4px 20px rgba(0,0,0,0.12); transition: transform 0.3s ease, box-shadow 0.3s ease;`}
+              style={`animation-delay: ${i * 0.08}s;`}
             >
-              <picture>
-                <source srcset={cat.img.replace(/\.(jpe?g|png)$/i, "-sm.webp")} type="image/webp" />
-                <img
-                  src={cat.img}
-                  alt={cat.label}
-                  loading="lazy"
-                  decoding="async"
-                  width="560"
-                  height="420"
-                  style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.55s ease;"
-                  class="cat-card-img"
-                />
-              </picture>
+              <div class="cat-card-inner">
+                <picture>
+                  <source srcset={cat.img.replace(/\.(jpe?g|png)$/i, "-sm.webp")} type="image/webp" />
+                  <img
+                    src={cat.img}
+                    alt={cat.label}
+                    loading="lazy"
+                    decoding="async"
+                    width="560"
+                    height="373"
+                    class="cat-card-img"
+                  />
+                </picture>
 
-              {/* Gradient */}
-              <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,54,32,0.92) 0%, rgba(11,54,32,0.40) 55%, transparent 100%);"></div>
+                {/* Gradient */}
+                <div class="cat-overlay"></div>
 
-              {/* Count pill */}
-              {count > 0 && (
-                <span style="position: absolute; top: 1rem; left: 1rem; background: rgba(11,54,32,0.82); color: rgba(212,168,67,0.90); font-family: 'Outfit', sans-serif; font-size: 0.625rem; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; border-radius: 9999px; padding: 0.25rem 0.75rem; backdrop-filter: blur(8px);">
-                  {count} places
-                </span>
-              )}
-
-              {/* Content */}
-              <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem;">
-                <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(1.375rem, 2.5vw, 1.625rem); font-weight: 500; color: #F9F4EC; line-height: 1.1; margin-bottom: 0.5rem;">
-                  {cat.label}
-                </h2>
-                <p style="font-size: 0.8125rem; color: rgba(249,244,236,0.65); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.5; margin-bottom: 0.875rem;">
-                  {cat.tagline}
-                </p>
-
-                {/* State filter pills */}
-                <div class="flex flex-wrap gap-1.5">
-                  {NE_STATES.slice(0, 4).map((s) => (
-                    <a
-                      href={`/categories/${cat.slug}/${stateSlug(s)}`}
-                      onclick="event.stopPropagation()"
-                      style="font-size: 0.625rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(212,168,67,0.80); background: rgba(212,168,67,0.12); border: 1px solid rgba(212,168,67,0.25); border-radius: 9999px; padding: 0.2rem 0.625rem; font-family: 'Outfit', sans-serif; text-decoration: none; transition: background 0.15s;"
-                      class="state-pill"
-                    >
-                      {s}
-                    </a>
-                  ))}
-                  <span style="font-size: 0.625rem; font-weight: 600; color: rgba(249,244,236,0.35); display: flex; align-items: center; padding: 0.2rem 0.25rem; font-family: 'Outfit', sans-serif;">
-                    +{NE_STATES.length - 4} more
+                {/* Count badge */}
+                {count > 0 && (
+                  <span class="cat-badge">
+                    {count} places
                   </span>
-                </div>
+                )}
 
-                <div style="display: flex; align-items: center; gap: 0.375rem; color: rgba(212,168,67,0.80); font-family: 'Outfit', sans-serif; font-size: 0.8125rem; font-weight: 500; margin-top: 0.75rem;">
-                  <span>View all</span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                  </svg>
+                {/* Text content — bottom */}
+                <div class="cat-content">
+                  <h2 class="cat-title">{cat.label}</h2>
+                  <p class="cat-tagline">{cat.tagline}</p>
+                  <div class="cat-explore">
+                    <span>Explore</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                    </svg>
+                  </div>
                 </div>
               </div>
             </a>
@@ -130,30 +108,30 @@ function stateSlug(s: string) {
         })}
       </div>
 
-      {/* ── State-by-category SEO section ────────────────── */}
-      <div style="margin-top: 5rem;">
-        <div class="flex items-center gap-3 mb-8">
+      {/* ── Browse by State × Category (SEO links) ────────── */}
+      <div style="margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgba(196,137,42,0.20);">
+        <div class="flex items-center gap-3 mb-6">
           <div style="width: 2rem; height: 1px; background: linear-gradient(90deg, transparent, #C4892A);"></div>
           <p style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #6B4A12; font-family: 'Outfit', sans-serif;">
             Browse by State
           </p>
         </div>
 
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {NE_STATES.map((state) => (
-            <div style="background: rgba(255,255,255,0.55); border: 1px solid rgba(196,137,42,0.18); border-radius: 12px; padding: 1.25rem;">
-              <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.125rem; font-weight: 500; color: #1C1208; margin-bottom: 0.875rem;">
+            <div style="background: rgba(255,255,255,0.55); border: 1px solid rgba(196,137,42,0.18); border-radius: 12px; padding: 1.25rem 1.25rem 1rem;">
+              <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.0625rem; font-weight: 500; color: #1C1208; margin-bottom: 0.875rem; padding-bottom: 0.625rem; border-bottom: 1px solid rgba(196,137,42,0.12);">
                 {state}
               </h3>
-              <div class="flex flex-col gap-1.5">
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 {CATEGORIES.map((cat) => (
                   <a
                     href={`/categories/${cat.slug}/${stateSlug(state)}`}
-                    style="font-size: 0.8125rem; color: rgba(28,18,8,0.60); font-family: 'Outfit', sans-serif; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.15s;"
+                    style="font-size: 0.8125rem; color: rgba(28,18,8,0.58); font-family: 'Outfit', sans-serif; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.15s;"
                     class="seo-link"
                   >
-                    <span style="width: 4px; height: 4px; border-radius: 50%; background: rgba(196,137,42,0.50); flex-shrink: 0;"></span>
-                    Top {cat.label.split(" ")[0]} in {state}
+                    <span style="width: 3px; height: 3px; border-radius: 50%; background: rgba(196,137,42,0.55); flex-shrink: 0;"></span>
+                    Top {cat.label.split("&")[0].trim()} in {state}
                   </a>
                 ))}
               </div>
@@ -166,9 +144,85 @@ function stateSlug(s: string) {
   </section>
 
   <style>
-    .cat-card:hover { transform: translateY(-5px); box-shadow: 0 12px 36px rgba(0,0,0,0.20) !important; }
+    /* ── Category card ── */
+    .cat-card {
+      display: block;
+      text-decoration: none;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .cat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.20);
+    }
+    .cat-card-inner {
+      position: relative;
+      aspect-ratio: 3/2;
+      overflow: hidden;
+    }
+    .cat-card-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.55s ease;
+    }
     .cat-card:hover .cat-card-img { transform: scale(1.06); }
-    .state-pill:hover { background: rgba(212,168,67,0.22) !important; }
+    .cat-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11,54,32,0.90) 0%, rgba(11,54,32,0.35) 50%, transparent 100%);
+    }
+    .cat-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(11,54,32,0.82);
+      color: rgba(212,168,67,0.90);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      border-radius: 9999px;
+      padding: 0.25rem 0.75rem;
+      backdrop-filter: blur(8px);
+    }
+    .cat-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.25rem;
+    }
+    .cat-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+      font-weight: 500;
+      color: #F9F4EC;
+      line-height: 1.15;
+      margin-bottom: 0.375rem;
+    }
+    .cat-tagline {
+      font-size: 0.8125rem;
+      color: rgba(249,244,236,0.62);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+    .cat-explore {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      color: rgba(212,168,67,0.85);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
     .seo-link:hover { color: #6B4A12 !important; }
   </style>
 
