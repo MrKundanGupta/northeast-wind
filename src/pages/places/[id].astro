@@ -20,6 +20,9 @@ const d = place.data;
 const heroImage = d.hub_images?.[0] || d.images?.[0] || null;
 const galleryImages = d.hub_images?.slice(1, 3) ?? [];
 const stateSlug = d.location.state.toLowerCase().replace(/\s+/g, "-");
+const placeUrl = `https://axomor.com/places/${place.id}`;
+
+const allImages = [...(d.hub_images ?? []), ...(d.images ?? [])];
 
 const isSpiritual = d.category === "Spiritual";
 const jsonLd = {
@@ -27,18 +30,47 @@ const jsonLd = {
   "@type": isSpiritual ? "PlaceOfWorship" : "TouristAttraction",
   name: d.name,
   description: d.seo.meta_description,
-  image: d.images[0] || undefined,
+  url: placeUrl,
+  ...(allImages.length > 0 && {
+    image: allImages.map(img => ({ "@type": "ImageObject", url: img })),
+  }),
   geo: {
     "@type": "GeoCoordinates",
     latitude: d.location.lat,
     longitude: d.location.lng,
   },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: d.location.address,
+    addressRegion: d.location.state,
+    addressCountry: "IN",
+  },
   publicAccess: true,
+  ...(d.ratings?.google_rating && {
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: d.ratings.google_rating,
+      reviewCount: d.ratings.google_reviews_count || 5,
+      bestRating: 5,
+      worstRating: 1,
+    },
+  }),
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://axomor.com" },
+    { "@type": "ListItem", position: 2, name: d.location.state, item: `https://axomor.com/states/${stateSlug}` },
+    { "@type": "ListItem", position: 3, name: d.name, item: placeUrl },
+  ],
 };
 ---
 
-<BaseLayout title={d.seo.meta_title} description={d.seo.meta_description}>
+<BaseLayout title={d.seo.meta_title} description={d.seo.meta_description} image={heroImage ?? undefined}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 
   {/* Hero Image */}
   {heroImage ? (
@@ -49,6 +81,7 @@ const jsonLd = {
         class="h-full w-full object-cover opacity-85"
         loading="eager"
         decoding="async"
+        fetchpriority="high"
       />
       <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
 

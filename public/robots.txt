@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Block CMS and internal routes
+Disallow: /keystatic/
+Disallow: /api/
+Disallow: /_astro/
+
+# AI crawlers — allow indexing
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Sitemap
+Sitemap: https://axomor.com/sitemap.xml

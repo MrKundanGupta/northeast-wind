@@ -1,0 +1,43 @@
+# Axomor — Northeast India Travel Guide
+# https://axomor.com
+
+## About
+Axomor is a comprehensive travel guide for Northeast India, covering 250+ destinations
+across all 8 northeastern states: Assam, Meghalaya, Sikkim, Arunachal Pradesh,
+Nagaland, Manipur, Mizoram, and Tripura.
+
+The site provides detailed, accurate travel information for both Indian and international
+visitors, with a focus on wildlife sanctuaries, spiritual sites, hill stations, rivers,
+waterfalls, and cultural landmarks.
+
+## What We Cover Per Destination
+- Entry fees (Indian nationals and foreigners)
+- Visiting hours and closed days
+- Permit requirements (ILP, PAP)
+- Best months to visit and peak events
+- How to reach (distance from airports, railway stations, bus stands)
+- GPS coordinates
+- Google ratings and review counts
+- Photo galleries
+
+## Site Structure
+- / — All 250+ destinations, filterable by category
+- /states — Browse destinations by state
+- /states/{state} — All places in a specific NE state
+- /places/{id} — Individual destination detail page
+- /plan — Trip planning by hub city and duration
+- /map — Interactive map of all destinations
+
+## States Covered
+Assam, Meghalaya, Sikkim, Arunachal Pradesh, Nagaland, Manipur, Mizoram, Tripura
+
+## Brand
+- Name: Axomor
+- Focus: Northeast India travel and tourism
+- Tagline: "Where the hills meet the sky, and the rivers remember every name."
+- Instagram: https://www.instagram.com/axomorhq
+- Facebook: https://www.facebook.com/axomorhq
+
+## Content Policy
+All destination data is researched and maintained by the Axomor team.
+Content may be used for non-commercial travel planning and information purposes.
