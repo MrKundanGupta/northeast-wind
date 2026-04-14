@@ -40,7 +40,7 @@ const FALLBACK_IMG = "/images/nagaland/dzukou-valley/1.jpg";
     {/* Background photo layer */}
     <div style={`
       position: absolute; inset: 0;
-      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2560&q=80');
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1600&q=60');
       background-size: cover;
       background-position: center 30%;
     `}></div>
@@ -160,7 +160,7 @@ const FALLBACK_IMG = "/images/nagaland/dzukou-valley/1.jpg";
               class={`state-img-card reveal`}
               style={`aspect-ratio: 3/4; animation-delay: ${i * 0.06}s;`}
             >
-              <img src={img} alt={`${state} landscape`} loading="lazy" decoding="async" />
+              <img src={img} alt={`${state} landscape`} loading="lazy" decoding="async" width="320" height="427" />
               <div class="card-overlay"></div>
               <div class="card-content">
                 <p style="font-size: 0.625rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(212,168,67,0.85); font-family: 'Outfit', sans-serif; margin-bottom: 0.375rem;">

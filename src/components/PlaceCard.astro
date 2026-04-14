@@ -39,8 +39,9 @@ const cartPlace = { id, name, category, subCategory, state, googleRating, image:
         alt={name}
         loading="lazy"
         decoding="async"
-        class="h-full w-full object-cover"
-        style="transition: transform 0.55s cubic-bezier(0.22,1,0.36,1); will-change: transform;"
+        width="400"
+        height="250"
+        class="h-full w-full object-cover place-card-img"
       />
     ) : (
       <div class="flex h-full w-full items-center justify-center tribal-pattern" style="background-color: #E8DCC8;">
@@ -112,6 +113,9 @@ const cartPlace = { id, name, category, subCategory, state, googleRating, image:
 </a>
 
 <style>
+  .place-card-img {
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
   .place-card:hover {
     box-shadow: 0 16px 48px rgba(28,18,8,0.14) !important;
     transform: translateY(-4px);
@@ -119,7 +123,8 @@ const cartPlace = { id, name, category, subCategory, state, googleRating, image:
   .place-card:hover .place-card-title {
     color: #145C35 !important;
   }
-  .place-card:hover img {
-    transform: scale(1.06) !important;
+  .place-card:hover .place-card-img {
+    will-change: transform;
+    transform: scale(1.06);
   }
 </style>
