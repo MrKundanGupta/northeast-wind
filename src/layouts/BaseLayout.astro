@@ -83,8 +83,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           {/* ── Logo ── */}
           <a href="/" style="text-decoration: none; flex-shrink: 0; display: inline-flex; align-items: center;">
             <div style="background: rgba(255,255,255,0.97); border-radius: 8px; padding: 5px 10px; display: inline-flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.12); transition: box-shadow 0.2s ease, transform 0.2s ease;" class="logo-wrap">
-              <img src="/logo_icon.png" alt="Axomor" class="sm:hidden" style="height: 30px; width: auto;" width="83" height="30" />
-              <img src="/logo_full.png" alt="AXOMOR" class="hidden sm:block" style="height: 28px; width: auto;" width="77" height="28" />
+              <picture class="sm:hidden">
+                <source srcset="/logo_icon.webp" type="image/webp" />
+                <img src="/logo_icon.png" alt="Axomor" style="height: 30px; width: auto;" width="83" height="30" />
+              </picture>
+              <picture class="hidden sm:block">
+                <source srcset="/logo_full.webp" type="image/webp" />
+                <img src="/logo_full.png" alt="AXOMOR" style="height: 28px; width: auto;" width="77" height="28" />
+              </picture>
             </div>
           </a>
 
@@ -144,7 +150,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div style="height: 64px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(196,137,42,0.15);">
           <a href="/" style="text-decoration: none;">
             <div style="background: rgba(255,255,255,0.97); border-radius: 8px; padding: 5px 10px; display: inline-flex; align-items: center;">
-              <img src="/logo_full.png" alt="AXOMOR" style="height: 26px; width: auto;" width="72" height="26" />
+              <picture>
+                <source srcset="/logo_full.webp" type="image/webp" />
+                <img src="/logo_full.png" alt="AXOMOR" style="height: 26px; width: auto;" width="72" height="26" />
+              </picture>
             </div>
           </a>
           <button id="mobile-menu-close"
@@ -238,7 +247,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           {/* Brand */}
           <div class="lg:col-span-1">
             <div class="mb-5" style="display: inline-flex; background: rgba(255,255,255,0.08); border-radius: 8px; padding: 6px 12px; border: 1px solid rgba(196,137,42,0.18);">
-              <img src="/logo_full.png" alt="AXOMOR" style="height: 26px; width: auto; filter: brightness(0) invert(1);" width="72" height="26" />
+              <picture>
+                <source srcset="/logo_full.webp" type="image/webp" />
+                <img src="/logo_full.png" alt="AXOMOR" style="height: 26px; width: auto; filter: brightness(0) invert(1);" width="72" height="26" />
+              </picture>
             </div>
             <p style="font-size: 0.875rem; color: rgba(249,244,236,0.48); line-height: 1.75; font-family: 'Outfit', sans-serif; font-weight: 300; max-width: 220px;">
               Your guide to Northeast India's untouched wilderness, sacred peaks, and living cultures.

@@ -75,14 +75,17 @@ const breadcrumbLd = {
   {/* Hero Image */}
   {heroImage ? (
     <div class="relative h-[55vh] min-h-[340px] w-full overflow-hidden bg-gray-900">
-      <img
-        src={heroImage}
-        alt={d.name}
-        class="h-full w-full object-cover opacity-85"
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
-      />
+      <picture>
+        <source srcset={heroImage!.replace(/\.(jpe?g|png)$/i, '.webp')} type="image/webp" />
+        <img
+          src={heroImage}
+          alt={d.name}
+          class="h-full w-full object-cover opacity-85"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </picture>
       <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
 
       {/* Overlay content */}
@@ -204,13 +207,16 @@ const breadcrumbLd = {
             <div class={`grid gap-3 ${galleryImages.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
               {galleryImages.map((img, i) => (
                 <div class="overflow-hidden rounded-xl">
-                  <img
-                    src={img}
-                    alt={`${d.name} photo ${i + 2}`}
-                    class="h-56 w-full object-cover transition duration-300 hover:scale-105"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <picture>
+                    <source srcset={img.replace(/\.(jpe?g|png)$/i, '.webp')} type="image/webp" />
+                    <img
+                      src={img}
+                      alt={`${d.name} photo ${i + 2}`}
+                      class="h-56 w-full object-cover transition duration-300 hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
                 </div>
               ))}
             </div>
