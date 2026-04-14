@@ -99,12 +99,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             <div style="width: 1px; height: 18px; background: rgba(196,137,42,0.28); margin: 0 0.625rem;"></div>
 
-            <CartToggleButton client:load />
+            <CartToggleButton client:idle />
           </div>
 
           {/* ── Mobile: cart + hamburger ── */}
           <div class="flex sm:hidden items-center gap-2.5">
-            <CartToggleButton client:load />
+            <CartToggleButton client:idle />
 
             <button id="mobile-menu-btn"
                     aria-label="Open navigation menu"
@@ -303,7 +303,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </div>
     </footer>
 
-    <TripSidebar client:load />
+    <TripSidebar client:idle />
 
     <style>
       /* ── Desktop nav links ── */
