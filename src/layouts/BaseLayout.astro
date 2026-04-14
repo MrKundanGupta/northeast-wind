@@ -24,12 +24,21 @@ const navLinks = [
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <!-- Google Tag Manager -->
-    <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-WQNJDC4L');</script>
+    <!-- Google Tag Manager — deferred after window load to protect LCP/TBT scores.
+         dataLayer is initialised immediately so pushes before load are queued. -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      window.addEventListener('load', function () {
+        var run = function () {
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-WQNJDC4L');
+        };
+        'requestIdleCallback' in window ? requestIdleCallback(run) : setTimeout(run, 1000);
+      });
+    </script>
     <!-- End Google Tag Manager -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />

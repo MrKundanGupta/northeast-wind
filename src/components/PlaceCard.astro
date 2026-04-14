@@ -35,7 +35,7 @@ const cartPlace = { id, name, category, subCategory, state, googleRating, image:
   <div class="relative overflow-hidden" style="aspect-ratio: 16/10; background: #EDE0C8; border-radius: 18px 18px 0 0; flex-shrink: 0;">
     {hasImage ? (
       <picture>
-        <source srcset={image!.replace(/\.(jpe?g|png)$/i, '.webp')} type="image/webp" />
+        <source srcset={image!.replace(/\.(jpe?g|png)$/i, '-sm.webp')} type="image/webp" />
         <img
           src={image}
           alt={name}

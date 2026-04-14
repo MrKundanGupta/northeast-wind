@@ -47,12 +47,25 @@ Pass `image={heroImage}` from place pages for best social sharing.
 - Instagram: https://www.instagram.com/axomorhq
 - Facebook: https://www.facebook.com/axomorhq
 
+## Image Architecture
+- Full WebP (1200px, q82): `.webp` — place detail hero + gallery
+- Thumbnail WebP (700px, q70): `-sm.webp` — PlaceCard + state cards
+- Run `node scripts/convert-to-webp.mjs` + `node scripts/convert-thumbnails.mjs` after adding images
+- Always use `<picture>` elements with WebP `<source>` — never bare `<img>` for content images
+
+## GTM Loading Rule
+GTM is deferred to after `window load` + `requestIdleCallback`. Do NOT move it back to
+immediate `<head>` loading — it costs 165ms main thread and blocks LCP on mobile.
+
 ## Key Files
 | File | Purpose |
 |---|---|
-| `src/layouts/BaseLayout.astro` | GTM, canonical, OG tags, site-wide meta |
+| `src/layouts/BaseLayout.astro` | GTM (deferred), canonical, OG tags, fonts |
 | `src/pages/places/[id].astro` | Place detail + schema |
 | `src/pages/sitemap.xml.ts` | Dynamic XML sitemap |
 | `public/robots.txt` | Crawler directives |
 | `public/llms.txt` | AI crawler context |
-| `astro.config.mjs` | Site URL, integrations |
+| `context.md` | Project context snapshot |
+| `skills.md` | Implementation patterns |
+| `scripts/convert-to-webp.mjs` | Full-size WebP conversion |
+| `scripts/convert-thumbnails.mjs` | Thumbnail WebP conversion |
