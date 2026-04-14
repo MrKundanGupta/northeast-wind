@@ -1,0 +1,194 @@
+---
+export const prerender = true;
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import cityImages from "../../data/city-images.json";
+
+function slugify(str: string) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+const allHubCities = await getCollection("hubCities");
+
+// State colour accents for grouping
+const STATE_COLOR: Record<string, string> = {
+  "Assam":             "#C4892A",
+  "Meghalaya":         "#4A8A2C",
+  "Sikkim":            "#2C6E9A",
+  "Arunachal Pradesh": "#7B3F9E",
+  "Nagaland":          "#C4522A",
+  "Manipur":           "#2A7A6A",
+  "Mizoram":           "#7A5C2A",
+  "Tripura":           "#9A3B6E",
+};
+
+// State fallback images for cities without a city image
+const STATE_FALLBACK: Record<string, string> = {
+  "Assam":             "/images/assam/kaziranga-national-park/1.jpg",
+  "Meghalaya":         "/images/meghalaya/nohkalikai-falls/1.jpg",
+  "Sikkim":            "/images/sikkim/tsomgo-lake/1.jpg",
+  "Arunachal Pradesh": "/images/arunachal-pradesh/tawang-monastery/1.jpg",
+  "Nagaland":          "/images/nagaland/dzukou-valley/1.jpg",
+  "Manipur":           "/images/manipur/loktak-lake/1.png",
+  "Mizoram":           "/images/mizoram/vantawng-falls/1.jpg",
+  "Tripura":           "/images/tripura/neermahal/1.jpg",
+};
+
+// Build list: one entry per hub city
+const destinations = allHubCities
+  .map((h) => {
+    const citySlug = slugify(h.data.city);
+    const img =
+      (cityImages as Record<string, string>)[citySlug] ??
+      STATE_FALLBACK[h.data.location?.state ?? h.data.region] ??
+      "/images/assam/kaziranga-national-park/1.jpg";
+    return {
+      name: h.data.name ?? h.data.city,
+      city: h.data.city,
+      slug: citySlug,
+      state: h.data.location?.state ?? h.data.region ?? "",
+      img,
+    };
+  })
+  // deduplicate by slug
+  .filter((d, i, arr) => arr.findIndex((x) => x.slug === d.slug) === i)
+  .sort((a, b) => a.state.localeCompare(b.state) || a.name.localeCompare(b.name));
+
+// Group by state
+const byState = new Map<string, typeof destinations>();
+for (const d of destinations) {
+  if (!byState.has(d.state)) byState.set(d.state, []);
+  byState.get(d.state)!.push(d);
+}
+const stateGroups = [...byState.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+---
+
+<BaseLayout
+  title="Travel Destinations in Northeast India — Axomor"
+  description="Explore all travel destinations across Northeast India — from Guwahati and Shillong to Tawang and Ziro. Find hub cities by state and discover hidden gems."
+>
+
+  {/* ── Page Header ─────────────────────────────────────── */}
+  <section style="background: #1E3D10; position: relative; padding: 5rem 0 4rem; overflow: hidden;" class="tribal-pattern-dense">
+    <div style="position: absolute; top: -80px; right: -80px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(196,137,42,0.14) 0%, transparent 65%); pointer-events: none;"></div>
+    <div style="height: 2px; background: linear-gradient(90deg, #6B4A12, #8B5E1A, #C4892A, #D4A843, #C4892A, #8B5E1A, #6B4A12); margin-bottom: 3.5rem;"></div>
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative" style="z-index: 1;">
+      <div class="flex items-center gap-3 mb-5">
+        <div style="width: 2rem; height: 1px; background: linear-gradient(90deg, transparent, #D4A843);"></div>
+        <p style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #D4A843; font-family: 'Outfit', sans-serif;">
+          Hub Cities & Towns
+        </p>
+      </div>
+      <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2.25rem, 6vw, 4rem); font-weight: 300; color: #F9F4EC; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 1.25rem;">
+        All <em style="font-style: italic; color: #D4A843; font-weight: 400;">Destinations</em><br />Across the Northeast
+      </h1>
+      <div style="display: flex; align-items: center; gap: 0.875rem; margin-bottom: 1.25rem;">
+        <div style="width: 3rem; height: 1.5px; background: linear-gradient(90deg, #C4892A, #D4A843);"></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="rgba(212,168,67,0.75)">
+          <path d="M12 2L14 9L21 12L14 15L12 22L10 15L3 12L10 9Z"/>
+        </svg>
+        <div style="width: 3rem; height: 1.5px; background: linear-gradient(90deg, #D4A843, #C4892A);"></div>
+      </div>
+      <p style="font-size: 1rem; color: rgba(249,244,236,0.58); font-family: 'Outfit', sans-serif; font-weight: 300; max-width: 520px; line-height: 1.75;">
+        {destinations.length} hub cities and towns across all 8 sister states. Each is a gateway to a distinct landscape, culture, and story.
+      </p>
+
+      {/* State jump links */}
+      <div class="flex flex-wrap gap-2 mt-7">
+        {stateGroups.map(([state]) => (
+          <a
+            href={`#${slugify(state)}`}
+            style="border: 1px solid rgba(196,137,42,0.35); background: rgba(196,137,42,0.10); color: rgba(212,168,67,0.88); border-radius: 9999px; padding: 0.3rem 0.875rem; font-size: 0.8125rem; font-weight: 500; font-family: 'Outfit', sans-serif; text-decoration: none; backdrop-filter: blur(8px); transition: background 0.15s ease;"
+          >
+            {state}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ── Destination Groups by State ───────────────────────── */}
+  <section style="background: #F2EAD6; padding: 4rem 0 6rem;">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+      {stateGroups.map(([state, cities], gi) => {
+        const accent = STATE_COLOR[state] ?? "#C4892A";
+        return (
+          <div id={slugify(state)} style={`margin-bottom: ${gi < stateGroups.length - 1 ? "4rem" : "0"};`}>
+            {/* State label */}
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem;">
+              <div style={`width: 4px; height: 2.5rem; background: ${accent}; border-radius: 2px; flex-shrink: 0;`}></div>
+              <div>
+                <a
+                  href={`/states/${slugify(state)}`}
+                  style={`font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400; color: #1C1208; text-decoration: none; line-height: 1; transition: color 0.15s;`}
+                  class="state-heading-link"
+                >
+                  {state}
+                </a>
+                <p style="font-size: 0.75rem; color: rgba(28,18,8,0.45); font-family: 'Outfit', sans-serif; margin-top: 0.125rem;">
+                  {cities.length} destination{cities.length !== 1 ? "s" : ""}
+                </p>
+              </div>
+            </div>
+
+            {/* City cards grid */}
+            <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {cities.map((city, i) => (
+                <a
+                  href={`/destinations/${city.slug}`}
+                  class="dest-card reveal"
+                  style={`animation-delay: ${i * 0.05}s; position: relative; display: block; border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; text-decoration: none; box-shadow: 0 2px 12px rgba(0,0,0,0.10); transition: transform 0.3s ease, box-shadow 0.3s ease;`}
+                >
+                  <picture>
+                    <source srcset={city.img.replace(/\.(jpe?g|png)$/i, "-sm.webp")} type="image/webp" />
+                    <img
+                      src={city.img}
+                      alt={`${city.name} — ${city.state}`}
+                      loading="lazy"
+                      decoding="async"
+                      width="400"
+                      height="300"
+                      style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;"
+                      class="dest-card-img"
+                    />
+                  </picture>
+
+                  {/* Gradient overlay */}
+                  <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,54,32,0.88) 0%, rgba(11,54,32,0.30) 55%, transparent 100%);"></div>
+
+                  {/* State pill */}
+                  <span style={`position: absolute; top: 0.75rem; left: 0.75rem; background: rgba(11,54,32,0.80); color: rgba(212,168,67,0.90); font-family: 'Outfit', sans-serif; font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; border-radius: 9999px; padding: 0.2rem 0.625rem; backdrop-filter: blur(8px);`}>
+                    {city.state}
+                  </span>
+
+                  {/* Name + arrow */}
+                  <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem;">
+                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 500; color: #F9F4EC; line-height: 1.1; margin-bottom: 0.375rem;">
+                      {city.name}
+                    </h2>
+                    <div style="display: flex; align-items: center; gap: 0.375rem; color: rgba(212,168,67,0.80); font-family: 'Outfit', sans-serif; font-size: 0.75rem; font-weight: 500;">
+                      <span>Explore</span>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                      </svg>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+    </div>
+  </section>
+
+  <style>
+    .dest-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.18) !important; }
+    .dest-card:hover .dest-card-img { transform: scale(1.06); }
+    .state-heading-link:hover { color: #6B4A12 !important; }
+  </style>
+
+</BaseLayout>

@@ -1,0 +1,208 @@
+---
+export const prerender = true;
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PlaceCard from "../../../components/PlaceCard.astro";
+import { CATEGORIES, getCategoryBySlug, matchCategory, NE_STATES } from "../../../data/categories";
+
+export async function getStaticPaths() {
+  const allPlaces = await getCollection("places");
+
+  const paths = [];
+  for (const cat of CATEGORIES) {
+    for (const st of NE_STATES) {
+      const places = allPlaces.filter(
+        (p) =>
+          matchCategory(p.data.category) === cat.slug &&
+          (p.data.location?.state ?? p.data.state ?? "")
+            .toLowerCase()
+            .replace(/\s+/g, "-") === st.slug
+      );
+      paths.push({
+        params: { category: cat.slug, state: st.slug },
+        props: { cat, stateName: st.name, stateSlug: st.slug, places },
+      });
+    }
+  }
+  return paths;
+}
+
+const { cat, stateName, stateSlug, places } = Astro.props;
+
+// Sort by rating desc
+const sorted = [...places].sort(
+  (a, b) => (b.data.ratings?.google_rating ?? 0) - (a.data.ratings?.google_rating ?? 0)
+);
+
+// Other states that have places in this category (for cross-link)
+const allPlacesInCat = await getCollection("places").then((all) =>
+  all.filter((p) => matchCategory(p.data.category) === cat.slug)
+);
+const otherStates = [...new Set(
+  allPlacesInCat
+    .map((p) => p.data.location?.state ?? p.data.state ?? "")
+    .filter((s) => s && s.toLowerCase().replace(/\s+/g, "-") !== stateSlug)
+)].sort();
+
+const title = `Top ${cat.label} in ${stateName} — Axomor`;
+const description = places.length > 0
+  ? `Discover the best ${cat.label.toLowerCase()} in ${stateName}. ${places.length} handpicked places — from hidden gems to iconic landmarks.`
+  : `Explore ${cat.label.toLowerCase()} across ${stateName}, Northeast India. Handpicked destinations curated by local experts.`;
+---
+
+<BaseLayout title={title} description={description} image={cat.img}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": title,
+    "description": description,
+    "url": `https://axomor.com/categories/${cat.slug}/${stateSlug}`,
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",       "item": "https://axomor.com"                                   },
+        { "@type": "ListItem", "position": 2, "name": "Categories", "item": "https://axomor.com/categories"                       },
+        { "@type": "ListItem", "position": 3, "name": cat.label,    "item": `https://axomor.com/categories/${cat.slug}`           },
+        { "@type": "ListItem", "position": 4, "name": stateName,    "item": `https://axomor.com/categories/${cat.slug}/${stateSlug}` },
+      ],
+    },
+  })} />
+
+  {/* ── Hero Banner ──────────────────────────────────────── */}
+  <section style="position: relative; height: 60vh; min-height: 380px; overflow: hidden;">
+    <picture>
+      <source srcset={cat.img.replace(/\.(jpe?g|png)$/i, ".webp")} type="image/webp" />
+      <img
+        src={cat.img}
+        alt={`${cat.label} in ${stateName}`}
+        loading="eager"
+        fetchpriority="high"
+        width="1200"
+        height="800"
+        style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"
+      />
+    </picture>
+    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,54,32,0.96) 0%, rgba(11,54,32,0.50) 55%, rgba(11,54,32,0.18) 100%);"></div>
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #8B5E1A, #C4892A, #D4A843, #C4892A, #8B5E1A);"></div>
+
+    <div style="position: relative; height: 100%; display: flex; align-items: flex-end;">
+      <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8" style="padding-bottom: 3rem;">
+        {/* Breadcrumb */}
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+          <a href="/" style="font-size: 0.75rem; color: rgba(212,168,67,0.65); font-family: 'Outfit', sans-serif; text-decoration: none;">Home</a>
+          <span style="color: rgba(212,168,67,0.35); font-size: 0.75rem;">›</span>
+          <a href="/categories" style="font-size: 0.75rem; color: rgba(212,168,67,0.65); font-family: 'Outfit', sans-serif; text-decoration: none;">Categories</a>
+          <span style="color: rgba(212,168,67,0.35); font-size: 0.75rem;">›</span>
+          <a href={`/categories/${cat.slug}`} style="font-size: 0.75rem; color: rgba(212,168,67,0.65); font-family: 'Outfit', sans-serif; text-decoration: none;">{cat.label}</a>
+          <span style="color: rgba(212,168,67,0.35); font-size: 0.75rem;">›</span>
+          <span style="font-size: 0.75rem; color: #D4A843; font-family: 'Outfit', sans-serif;">{stateName}</span>
+        </div>
+
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 400; color: #F9F4EC; line-height: 1.1; margin-bottom: 0.75rem;">
+          Top {cat.label}<br />
+          <em style="font-style: italic; color: #D4A843; font-weight: 300;">in {stateName}</em>
+        </h1>
+        {places.length > 0 && (
+          <p style="font-size: 1rem; color: rgba(249,244,236,0.60); font-family: 'Outfit', sans-serif; font-weight: 300; max-width: 500px; line-height: 1.7;">
+            {places.length} handpicked {cat.label.toLowerCase()} — sorted by visitor rating.
+          </p>
+        )}
+
+        {/* Sister category links */}
+        <div class="flex flex-wrap gap-2 mt-5">
+          <a href={`/categories/${cat.slug}`}
+             style="border: 1px solid rgba(196,137,42,0.35); background: rgba(196,137,42,0.10); color: rgba(212,168,67,0.85); border-radius: 9999px; padding: 0.3rem 0.875rem; font-size: 0.8125rem; font-weight: 500; font-family: 'Outfit', sans-serif; text-decoration: none;">
+            ← All States
+          </a>
+          <a href={`/states/${stateSlug}`}
+             style="border: 1px solid rgba(196,137,42,0.35); background: rgba(196,137,42,0.10); color: rgba(212,168,67,0.85); border-radius: 9999px; padding: 0.3rem 0.875rem; font-size: 0.8125rem; font-weight: 500; font-family: 'Outfit', sans-serif; text-decoration: none;">
+            Explore {stateName}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ── Places Grid ─────────────────────────────────────── */}
+  <section style="background: #F2EAD6; padding: 4rem 0 6rem;">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+      {sorted.length > 0 ? (
+        <>
+          <p style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #6B4A12; font-family: 'Outfit', sans-serif; margin-bottom: 2rem;">
+            {sorted.length} {cat.label.toLowerCase()} in {stateName}
+          </p>
+          <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {sorted.map((place, i) => (
+              <div class="reveal" style={`animation-delay: ${(i % 8) * 0.06}s;`}>
+                <PlaceCard
+                  id={place.id}
+                  name={place.data.name}
+                  category={place.data.category}
+                  subCategory={place.data.sub_category ?? ""}
+                  state={place.data.location?.state ?? ""}
+                  googleRating={place.data.ratings?.google_rating ?? null}
+                  reviewsCount={place.data.ratings?.google_reviews_count ?? null}
+                  tags={place.data.tags ?? []}
+                  image={place.data.images?.[0] ?? ""}
+                  logistics={place.data.logistics ?? []}
+                />
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div style="text-align: center; padding: 4rem 0;">
+          <p style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; color: rgba(28,18,8,0.45); margin-bottom: 1rem;">
+            Nothing catalogued here yet
+          </p>
+          <p style="font-family: 'Outfit', sans-serif; font-size: 0.9375rem; color: rgba(28,18,8,0.38);">
+            We're still adding places in this category for {stateName}.
+          </p>
+          <a href={`/categories/${cat.slug}`}
+             style="display: inline-block; margin-top: 1.5rem; border: 1px solid rgba(196,137,42,0.40); color: #6B4A12; border-radius: 9999px; padding: 0.5rem 1.5rem; font-size: 0.875rem; font-family: 'Outfit', sans-serif; text-decoration: none; transition: background 0.15s;"
+             class="back-link">
+            ← View all {cat.label}
+          </a>
+        </div>
+      )}
+
+      {/* ── Other states (internal cross-links for SEO) ── */}
+      {otherStates.length > 0 && (
+        <div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid rgba(196,137,42,0.20);">
+          <div class="flex items-center gap-3 mb-5">
+            <div style="width: 2rem; height: 1px; background: linear-gradient(90deg, transparent, #C4892A);"></div>
+            <p style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #6B4A12; font-family: 'Outfit', sans-serif;">
+              Same Category · Other States
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            {otherStates.map((s) => {
+              const sl = s.toLowerCase().replace(/\s+/g, "-");
+              const cnt = allPlacesInCat.filter(
+                (p) => (p.data.location?.state ?? p.data.state ?? "")
+                  .toLowerCase().replace(/\s+/g, "-") === sl
+              ).length;
+              return (
+                <a
+                  href={`/categories/${cat.slug}/${sl}`}
+                  style="border: 1px solid rgba(196,137,42,0.22); background: rgba(255,255,255,0.55); color: rgba(28,18,8,0.65); border-radius: 9999px; padding: 0.35rem 1rem; font-size: 0.8125rem; font-family: 'Outfit', sans-serif; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.15s, color 0.15s;"
+                  class="cross-link"
+                >
+                  {cat.label.split(" ")[0]} in {s}
+                  <span style="font-size: 0.6875rem; font-weight: 600; color: #C4892A;">({cnt})</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <style>
+    .back-link:hover { background: rgba(196,137,42,0.08) !important; }
+    .cross-link:hover { background: rgba(255,255,255,0.82) !important; color: #1C1208 !important; }
+  </style>
+
+</BaseLayout>
