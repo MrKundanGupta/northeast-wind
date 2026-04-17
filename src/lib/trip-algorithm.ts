@@ -16,6 +16,7 @@ export interface PlaceData {
   state: string;
   city: string;
   rating: number | null;
+  ourRating: number | null;
   image: string | null;
   tags: string[];
   visitingHours: { open_time?: string; close_time?: string } | null;
@@ -336,8 +337,11 @@ export function buildTrip(params: TripParams, allPlaces: PlaceData[]): Generated
   candidates = candidates.sort((a, b) => {
     const distA = haversineKm(startingPoint.lat, startingPoint.lng, a.lat, a.lng);
     const distB = haversineKm(startingPoint.lat, startingPoint.lng, b.lat, b.lng);
-    const scoreA = (a.rating ?? 4.0) * 15 - distA * 0.1;
-    const scoreB = (b.rating ?? 4.0) * 15 - distB * 0.1;
+    // ourRating is primary signal; google rating fills in when absent
+    const rA = a.ourRating ?? a.rating ?? 4.0;
+    const rB = b.ourRating ?? b.rating ?? 4.0;
+    const scoreA = rA * 20 - distA * 0.1;
+    const scoreB = rB * 20 - distB * 0.1;
     return scoreB - scoreA;
   });
 

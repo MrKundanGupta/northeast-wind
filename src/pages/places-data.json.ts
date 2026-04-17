@@ -23,6 +23,7 @@ export const GET: APIRoute = async () => {
       state:    p.data.location.state,
       city:     p.data.city ?? '',
       rating:   p.data.ratings?.google_rating ?? null,
+      ourRating: p.data.ratings?.our_rating ?? null,
       image:    p.data.hub_images?.[0] ?? p.data.images?.[0] ?? null,
       tags:     p.data.tags ?? [],
       visitingHours: p.data.visiting_hours ?? null,
