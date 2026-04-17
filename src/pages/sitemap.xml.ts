@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { CATEGORIES } from '../data/categories';
+import pseoConfig from '../data/pseo-config.json';
 
 const SITE = 'https://axomor.com';
 
@@ -51,9 +52,25 @@ export const GET: APIRoute = async () => {
     })
     .filter(Boolean) as { loc: string; priority: string; changefreq: string }[];
 
+  // ── Destination × category pages ─────────────────────
+  const destCatSeen = new Set<string>();
+  const destCatUrls: { loc: string; priority: string; changefreq: string }[] = [];
+  for (const p of places) {
+    const city = p.data.city as string | undefined;
+    if (!city || !/^[A-Za-z]/.test(city) || city.length <= 2) continue;
+    const key = `${slugify(city)}::${slugify(p.data.category)}`;
+    if (destCatSeen.has(key)) continue;
+    destCatSeen.add(key);
+    destCatUrls.push({
+      loc: `${SITE}/destinations/${slugify(city)}/${slugify(p.data.category)}`,
+      priority: '0.75',
+      changefreq: 'monthly',
+    });
+  }
+
   // ── Place pages ──────────────────────────────────────
   const placeUrls = [...places, ...hubCities].map(p => ({
-    loc: `${SITE}/places/${p.id}`,
+    loc: `${SITE}/places/${encodeURIComponent(p.id)}`,
     priority: '0.8',
     changefreq: 'monthly',
   }));
@@ -74,12 +91,31 @@ export const GET: APIRoute = async () => {
     }))
   );
 
+  // ── PSEO city hub pages (/[state]/[city]) ────────────
+  const pseoCityUrls = pseoConfig.cities.map(city => ({
+    loc: `${SITE}/${city.stateSlug}/${city.slug}`,
+    priority: '0.8',
+    changefreq: 'monthly',
+  }));
+
+  // ── PSEO city × category pages ───────────────────────
+  const pseoCatUrls = pseoConfig.cities.flatMap(city =>
+    pseoConfig.categories.map(cat => ({
+      loc: `${SITE}/${city.stateSlug}/${city.slug}/${cat.slug}`,
+      priority: '0.8',
+      changefreq: 'monthly',
+    }))
+  );
+
   const allUrls = [
     ...staticUrls,
     ...stateUrls,
     ...destUrls,
+    ...destCatUrls,
     ...catUrls,
     ...catStateUrls,
+    ...pseoCityUrls,
+    ...pseoCatUrls,
     ...placeUrls,
   ];
 
