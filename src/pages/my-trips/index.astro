@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="My Trips — Axomor" description="Your saved Northeast India trip itineraries.">
+  <div class="mx-auto max-w-2xl px-4 py-10 sm:px-6">
+
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-gray-900">My Trips</h1>
+      <p class="mt-1 text-sm text-gray-500">Your saved Northeast India itineraries, all in one place.</p>
+    </div>
+
+    {/* React island — renders trip list from localStorage */}
+    <div id="my-trips-root" />
+
+  </div>
+</BaseLayout>
+
+<script>
+  import { loadTripsFromStorage, $trips, deleteTrip } from '../../stores/trip-planner';
+  import { openWizard } from '../../stores/trip-planner';
+
+  loadTripsFromStorage();
+
+  function fmtDate(ts: number) {
+    return new Date(ts).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function render() {
+    const trips = $trips.get();
+    const root  = document.getElementById('my-trips-root');
+    if (!root) return;
+
+    if (trips.length === 0) {
+      root.innerHTML = `
+        <div class="flex flex-col items-center py-24 text-center">
+          <span class="text-6xl mb-4">🗺️</span>
+          <h2 class="text-lg font-semibold text-gray-900">No trips yet</h2>
+          <p class="mt-2 text-sm text-gray-500 max-w-xs">Use the trip planner (bottom-right button) to create your first itinerary.</p>
+          <button id="open-wizard-btn" class="mt-6 rounded-xl bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition">
+            Plan a trip
+          </button>
+        </div>`;
+      document.getElementById('open-wizard-btn')?.addEventListener('click', openWizard);
+      return;
+    }
+
+    root.innerHTML = `<div class="space-y-4">${trips.map(trip => `
+      <div class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition">
+        <a href="/my-trips/${trip.id}" class="block px-5 py-4">
+          <div class="flex items-start justify-between gap-2">
+            <div class="min-w-0">
+              <h2 class="font-semibold text-gray-900 truncate">${trip.name}</h2>
+              <p class="text-xs text-gray-400 mt-0.5">Saved ${fmtDate(trip.createdAt)}</p>
+            </div>
+            <span class="flex-shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              ${trip.durationDays}d
+            </span>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs text-gray-500">
+            <span class="flex items-center gap-1">📍 ${trip.startingPoint.name}</span>
+            <span class="flex items-center gap-1">🗺️ ${trip.totalPlaces} places</span>
+            <span class="flex items-center gap-1">🚗 ~${trip.totalDriveKm} km</span>
+          </div>
+        </a>
+        <div class="flex items-center gap-2 border-t border-gray-100 px-5 py-2.5">
+          <a href="/my-trips/${trip.id}" class="text-xs font-medium text-emerald-600 hover:underline">View itinerary →</a>
+          <span class="text-gray-200">|</span>
+          <button data-delete="${trip.id}" class="text-xs text-red-400 hover:text-red-600 transition">Delete</button>
+        </div>
+      </div>
+    `).join('')}</div>`;
+
+    root.querySelectorAll('[data-delete]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = (btn as HTMLElement).dataset.delete!;
+        if (confirm('Delete this trip?')) { deleteTrip(id); render(); }
+      });
+    });
+  }
+
+  render();
+  $trips.subscribe(render);
+</script>

@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import CartToggleButton from "../components/CartToggleButton";
 import TripSidebar from "../components/TripSidebar";
+import TripWizard from "../components/TripWizard";
 
 interface Props {
   title: string;
@@ -17,7 +18,7 @@ const navLinks = [
   { href: "/states",       label: "States",         icon: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" },
   { href: "/destinations", label: "Destinations",   icon: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" },
   { href: "/categories",   label: "Categories",     icon: "M4 6h16M4 10h16M4 14h16M4 18h16" },
-  { href: "/plan",         label: "Plan Trip",      icon: "M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" },
+  { href: "/my-trips",     label: "My Trips",       icon: "M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" },
   { href: "/map",          label: "Map",            icon: "M9 3v14l6-4 6 4V3M9 3H3v14l6-4" },
 ];
 ---
@@ -276,7 +277,7 @@ const navLinks = [
           <div>
             <p style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #C4892A; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif;">Explore</p>
             <div class="flex flex-col gap-2.5">
-              {[{href:"/states",label:"By State"},{href:"/destinations",label:"Destinations"},{href:"/categories",label:"Categories"},{href:"/plan",label:"Plan by Hub"},{href:"/map",label:"Interactive Map"}].map(({href,label}) => (
+              {[{href:"/states",label:"By State"},{href:"/destinations",label:"Destinations"},{href:"/categories",label:"Categories"},{href:"/my-trips",label:"My Trips"},{href:"/map",label:"Interactive Map"}].map(({href,label}) => (
                 <a href={href} class="footer-link"
                    style="font-size: 0.875rem; color: rgba(249,244,236,0.55); font-family: 'Outfit', sans-serif; text-decoration: none; transition: color 0.15s ease; display: flex; align-items: center; gap: 0.5rem;">
                   <span class="footer-dot" style="width: 4px; height: 4px; border-radius: 50%; background: rgba(196,137,42,0.45); flex-shrink: 0; transition: background 0.15s ease;"></span>
@@ -326,6 +327,7 @@ const navLinks = [
     </footer>
 
     <TripSidebar client:idle />
+    <TripWizard client:idle />
 
     <style>
       /* ── Desktop nav links ── */

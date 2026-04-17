@@ -1,0 +1,251 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Trip Itinerary — Axomor" description="Your personalised Northeast India trip itinerary.">
+  <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6">
+
+    <nav class="mb-6 text-sm text-gray-500">
+      <a href="/" class="hover:text-emerald-700">Home</a>
+      <span class="mx-2">/</span>
+      <a href="/my-trips" class="hover:text-emerald-700">My Trips</a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-900" id="trip-name-breadcrumb">Itinerary</span>
+    </nav>
+
+    <div id="trip-detail-root">
+      <div class="flex items-center justify-center py-20 text-gray-400">
+        <span class="animate-spin mr-2">⟳</span> Loading trip...
+      </div>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<script>
+  import { loadTripsFromStorage, $trips, deleteTrip, openWizard } from '../../stores/trip-planner';
+  import type { SavedTrip } from '../../stores/trip-planner';
+  import type { TripActivity, TripDay } from '../../lib/trip-algorithm';
+
+  loadTripsFromStorage();
+
+  const tripId = window.location.pathname.split('/').pop()!;
+
+  function fmtMins(mins: number): string {
+    if (mins < 60) return `${mins} min`;
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  }
+
+  function fmtDate(isoDate: string): string {
+    return new Date(isoDate + 'T00:00:00').toLocaleDateString('en-IN', {
+      weekday: 'short', day: 'numeric', month: 'short'
+    });
+  }
+
+  function activityHTML(act: TripActivity): string {
+    if (act.type === 'travel') {
+      return `<div class="flex items-center gap-2 py-1.5 pl-2 text-xs text-gray-400">
+        <div class="h-1.5 w-1.5 rounded-full bg-gray-300 flex-shrink-0"></div>
+        🚗 ${act.startTime} · ${fmtMins(act.travelTimeMins ?? 0)} · ${act.distanceKm} km to ${act.toName}
+      </div>`;
+    }
+    if (act.type === 'meal') {
+      return `<div class="flex items-center gap-2 py-1.5 pl-2">
+        <div class="h-1.5 w-1.5 rounded-full bg-amber-300 flex-shrink-0"></div>
+        <div class="flex-1 rounded-xl bg-amber-50 border border-amber-100 px-3 py-2 text-sm">
+          🍽️ <span class="font-medium text-amber-800">${act.label}</span>
+          <span class="ml-2 text-xs text-amber-400">${act.startTime}</span>
+          <p class="mt-0.5 text-xs text-amber-300 italic">Restaurant suggestions coming soon</p>
+        </div>
+      </div>`;
+    }
+    if (act.type === 'overnight') {
+      return `<div class="flex items-center gap-2 py-1.5 pl-2">
+        <div class="h-1.5 w-1.5 rounded-full bg-indigo-300 flex-shrink-0"></div>
+        <div class="flex-1 rounded-xl bg-indigo-50 border border-indigo-100 px-3 py-2 text-sm">
+          🌙 <span class="font-medium text-indigo-700">${act.label}</span>
+          <p class="mt-0.5 text-xs text-indigo-300 italic">Hotel booking coming soon</p>
+        </div>
+      </div>`;
+    }
+    if (act.type === 'visit') {
+      const imageTag = act.placeImage
+        ? `<img src="${act.placeImage}" alt="${act.placeName}" class="w-14 h-14 object-cover flex-shrink-0 rounded-l-xl" loading="lazy" />`
+        : '';
+      return `<div class="flex items-start gap-2 py-1.5 pl-2">
+        <div class="h-2 w-2 rounded-full bg-emerald-500 flex-shrink-0 mt-3"></div>
+        <div class="flex-1 rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm flex">
+          ${imageTag}
+          <div class="flex-1 px-3 py-2.5 min-w-0">
+            <p class="text-sm font-semibold text-gray-900 truncate">${act.placeName}</p>
+            <p class="text-xs text-gray-400">${act.placeCategory} · ${act.placeState}</p>
+            <div class="mt-1 flex items-center gap-2 flex-wrap text-xs text-gray-500">
+              <span>🕐 ${act.startTime} – ${act.endTime}</span>
+              ${act.placeRating ? `<span class="text-amber-500">⭐ ${act.placeRating}</span>` : ''}
+              <a href="/places/${act.placeId}" class="ml-auto text-[11px] font-medium text-emerald-600 hover:underline" target="_blank">Details →</a>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }
+    return '';
+  }
+
+  function dayHTML(day: TripDay, idx: number): string {
+    const visits = day.activities.filter(a => a.type === 'visit');
+    const drives = day.activities.filter(a => a.type === 'travel');
+    const totalDrive = drives.reduce((s, a) => s + (a.travelTimeMins ?? 0), 0);
+    const dateStr = day.date ? fmtDate(day.date) : '';
+
+    return `<div class="rounded-2xl border border-gray-200 bg-gray-50 overflow-hidden">
+      <div class="flex items-center justify-between bg-white border-b border-gray-100 px-4 py-3">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Day ${day.dayNumber}</span>
+          ${dateStr ? `<span class="ml-2 text-xs text-gray-400">${dateStr}</span>` : ''}
+          <p class="text-sm font-semibold text-gray-800 mt-0.5">${day.overnightAt}</p>
+        </div>
+        <div class="text-right text-xs text-gray-400 space-y-0.5">
+          <p>${visits.length} place${visits.length !== 1 ? 's' : ''}</p>
+          ${totalDrive > 0 ? `<p>~${fmtMins(totalDrive)} driving</p>` : ''}
+        </div>
+      </div>
+      <div class="px-3 py-2 space-y-0.5">
+        ${day.activities.map(activityHTML).join('')}
+      </div>
+    </div>`;
+  }
+
+  function render() {
+    const trip = $trips.get().find((t: SavedTrip) => t.id === tripId);
+    const root = document.getElementById('trip-detail-root');
+    if (!root) return;
+
+    if (!trip) {
+      root.innerHTML = `<div class="flex flex-col items-center py-20 text-center">
+        <span class="text-5xl mb-4">🤷</span>
+        <p class="text-gray-500 text-sm">Trip not found.</p>
+        <a href="/my-trips" class="mt-4 text-sm font-medium text-emerald-600 hover:underline">← Back to My Trips</a>
+      </div>`;
+      return;
+    }
+
+    // Update breadcrumb
+    const breadcrumb = document.getElementById('trip-name-breadcrumb');
+    if (breadcrumb) breadcrumb.textContent = trip.name;
+    document.title = `${trip.name} — Axomor`;
+
+    const PACE_LABEL: Record<string, string> = {
+      relaxed: '☁️ Relaxed', moderate: '🌤️ Moderate', explorer: '⚡ Explorer',
+    };
+
+    root.innerHTML = `
+      <div class="space-y-6">
+        <!-- Header -->
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">${trip.name}</h1>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            ${[
+              { t: `📍 ${trip.startingPoint.name}` },
+              { t: `📅 ${trip.durationDays} days` },
+              { t: `🗺️ ${trip.totalPlaces} places` },
+              { t: `🚗 ~${trip.totalDriveKm} km` },
+              { t: PACE_LABEL[trip.pace] },
+            ].map(p => `<span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-gray-600">${p.t}</span>`).join('')}
+          </div>
+        </div>
+
+        <!-- Day tabs -->
+        <div class="flex gap-1.5 overflow-x-auto pb-1" id="day-tabs">
+          ${trip.days.map((day: TripDay) => {
+            const v = day.activities.filter((a: TripActivity) => a.type === 'visit').length;
+            return `<button data-day="${day.dayNumber}" class="flex-shrink-0 rounded-xl px-4 py-2 text-sm font-medium transition ${day.dayNumber === 1 ? 'bg-emerald-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}">
+              Day ${day.dayNumber} <span class="text-xs opacity-60">${v}</span>
+            </button>`;
+          }).join('')}
+        </div>
+
+        <!-- Active day -->
+        <div id="day-content">
+          ${dayHTML(trip.days[0], 0)}
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-3 pt-2">
+          <button id="share-wa-btn" class="flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-700 transition">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Share on WhatsApp
+          </button>
+          <button id="print-btn" class="flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition">
+            🖨️ Save as PDF
+          </button>
+          <button data-delete="${trip.id}" class="ml-auto rounded-xl border border-red-100 px-4 py-2.5 text-sm font-medium text-red-400 hover:bg-red-50 transition">
+            Delete
+          </button>
+        </div>
+      </div>`;
+
+    // Day tab switching
+    let activeDay = 1;
+    document.getElementById('day-tabs')?.querySelectorAll('[data-day]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeDay = parseInt((btn as HTMLElement).dataset.day!);
+        document.querySelectorAll('#day-tabs [data-day]').forEach(b => {
+          b.className = 'flex-shrink-0 rounded-xl px-4 py-2 text-sm font-medium transition bg-gray-100 text-gray-600 hover:bg-gray-200';
+        });
+        btn.className = 'flex-shrink-0 rounded-xl px-4 py-2 text-sm font-medium transition bg-emerald-600 text-white';
+        const day = trip.days.find((d: TripDay) => d.dayNumber === activeDay);
+        if (day) document.getElementById('day-content')!.innerHTML = dayHTML(day, activeDay - 1);
+      });
+    });
+
+    // WhatsApp share
+    document.getElementById('share-wa-btn')?.addEventListener('click', () => {
+      const lines = [
+        `*${trip.name}*`,
+        `📍 Starting from ${trip.startingPoint.name}`,
+        `📅 ${trip.durationDays} days · ${trip.totalPlaces} places · ~${trip.totalDriveKm} km`,
+        '',
+        ...trip.days.flatMap((day: TripDay) => {
+          const dateStr = day.date ? ` (${fmtDate(day.date)})` : '';
+          const visits = day.activities.filter(a => a.type === 'visit');
+          return [
+            `*Day ${day.dayNumber}${dateStr}* — ${day.overnightAt}`,
+            ...visits.map(v => `  • ${v.placeName} [${v.placeCategory}] ${v.startTime}`),
+            '',
+          ];
+        }),
+        'Planned with Axomor — axomor.com',
+      ];
+      const url = `https://wa.me/?text=${encodeURIComponent(lines.join('\n'))}`;
+      window.open(url, '_blank', 'noopener');
+    });
+
+    // Print to PDF
+    document.getElementById('print-btn')?.addEventListener('click', () => {
+      window.print();
+    });
+
+    // Delete
+    document.querySelector('[data-delete]')?.addEventListener('click', () => {
+      if (confirm('Delete this trip?')) {
+        deleteTrip(tripId);
+        window.location.href = '/my-trips';
+      }
+    });
+  }
+
+  render();
+  $trips.subscribe(render);
+</script>
+
+<style is:global>
+  @media print {
+    header, footer, nav, .fixed, button, [data-delete] { display: none !important; }
+    body { background: white; }
+    #trip-detail-root { padding: 0; }
+    .rounded-2xl { border-radius: 0; }
+    .shadow-sm { box-shadow: none; }
+  }
+</style>

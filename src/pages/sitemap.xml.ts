@@ -32,6 +32,7 @@ export const GET: APIRoute = async () => {
     { loc: `${SITE}/categories`,  priority: '0.9', changefreq: 'monthly' },
     { loc: `${SITE}/plan`,        priority: '0.8', changefreq: 'monthly' },
     { loc: `${SITE}/map`,         priority: '0.7', changefreq: 'monthly' },
+    { loc: `${SITE}/my-trips`,   priority: '0.6', changefreq: 'monthly' },
   ];
 
   // ── State pages ─────────────────────────────────────
