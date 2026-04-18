@@ -106,14 +106,14 @@ const FALLBACK_IMG = "/images/nagaland/dzukou-valley/1.jpg";
 
         {/* CTAs */}
         <div class="animate-fade-up animate-delay-4 flex flex-wrap gap-4 mb-20">
-          <a href="/plan" class="btn-forest inline-flex items-center gap-2.5"
-             style="font-family: 'Outfit', sans-serif; font-size: 0.9375rem; font-weight: 600;">
+          <button data-plan-trip class="btn-forest inline-flex items-center gap-2.5"
+             style="font-family: 'Outfit', sans-serif; font-size: 0.9375rem; font-weight: 600; border: none; cursor: pointer;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0"/>
               <path d="M12 8v4l3 3"/>
             </svg>
             Plan My Trip
-          </a>
+          </button>
           <a href="#destinations"
              class="inline-flex items-center gap-2.5 rounded-full px-7 py-3 transition"
              style="border: 1.5px solid rgba(249,244,236,0.28); color: rgba(249,244,236,0.88); font-family: 'Outfit', sans-serif; font-size: 0.9375rem; font-weight: 500; background: rgba(249,244,236,0.06); backdrop-filter: blur(8px);">
@@ -261,15 +261,15 @@ const FALLBACK_IMG = "/images/nagaland/dzukou-valley/1.jpg";
       <p class="reveal" style="font-size: 1rem; color: rgba(249,244,236,0.60); font-family: 'Outfit', sans-serif; font-weight: 300; max-width: 460px; margin: 0 auto 2.5rem; line-height: 1.75;">
         Select your hub airport or station. We'll show you every destination reachable within your available time.
       </p>
-      <a href="/plan" class="reveal btn-forest inline-flex items-center gap-2.5"
-         style="font-family: 'Outfit', sans-serif; font-size: 0.9375rem;">
+      <button data-plan-trip class="reveal btn-forest inline-flex items-center gap-2.5"
+         style="font-family: 'Outfit', sans-serif; font-size: 0.9375rem; border: none; cursor: pointer;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>
           <line x1="9" y1="3" x2="9" y2="18"/>
           <line x1="15" y1="6" x2="15" y2="21"/>
         </svg>
         Start Planning
-      </a>
+      </button>
     </div>
     <div style="height: 2px; background: linear-gradient(90deg, #6B4A12, #C4892A, #D4A843, #C4892A, #6B4A12);"></div>
   </section>
