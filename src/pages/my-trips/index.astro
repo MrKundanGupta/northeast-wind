@@ -17,7 +17,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
-  import { loadTripsFromStorage, $trips, deleteTrip } from '../../stores/trip-planner';
+  import { loadTripsFromStorage, $trips, deleteTrip, openSidebarWithTrip } from '../../stores/trip-planner';
   import { openWizard } from '../../stores/trip-planner';
 
   loadTripsFromStorage();
@@ -64,12 +64,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
         </a>
         <div class="flex items-center gap-2 border-t border-gray-100 px-5 py-2.5">
-          <a href="/my-trips/${trip.id}" class="text-xs font-medium text-emerald-600 hover:underline">View itinerary →</a>
+          <button data-view="${trip.id}" class="text-xs font-medium text-emerald-600 hover:underline">View itinerary →</button>
+          <span class="text-gray-200">|</span>
+          <a href="/my-trips/${trip.id}" class="text-xs text-gray-400 hover:text-gray-600">Full page</a>
           <span class="text-gray-200">|</span>
           <button data-delete="${trip.id}" class="text-xs text-red-400 hover:text-red-600 transition">Delete</button>
         </div>
       </div>
     `).join('')}</div>`;
+
+    root.querySelectorAll('[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = (btn as HTMLElement).dataset.view!;
+        openSidebarWithTrip(id);
+      });
+    });
 
     root.querySelectorAll('[data-delete]').forEach(btn => {
       btn.addEventListener('click', () => {
