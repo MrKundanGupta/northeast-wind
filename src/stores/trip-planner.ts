@@ -163,6 +163,8 @@ export function moveActivityDown(tripId: string, dayNum: number, activityId: str
    Add place from + button to active trip
 ───────────────────────────────────────────────────────────────────────────── */
 
+export function clearActiveTrip() { $activeTrip.set(null); }
+
 export function addPlaceToActiveTrip(place: {
   id: string;
   name: string;
@@ -170,17 +172,23 @@ export function addPlaceToActiveTrip(place: {
   state: string;
   googleRating: number | null;
   image?: string;
-}): boolean {
+}, targetDayNum?: number): boolean {
   const active = $activeTrip.get();
   if (!active) return false;
 
-  // Find day with fewest visit activities
-  let targetDayIdx = 0;
-  let minVisits = Infinity;
-  active.days.forEach((day, i) => {
-    const v = day.activities.filter(a => a.type === 'visit').length;
-    if (v < minVisits) { minVisits = v; targetDayIdx = i; }
-  });
+  let targetDayIdx: number;
+  if (targetDayNum !== undefined) {
+    targetDayIdx = active.days.findIndex(d => d.dayNumber === targetDayNum);
+    if (targetDayIdx < 0) targetDayIdx = 0;
+  } else {
+    // Find day with fewest visit activities
+    targetDayIdx = 0;
+    let minVisits = Infinity;
+    active.days.forEach((day, i) => {
+      const v = day.activities.filter(a => a.type === 'visit').length;
+      if (v < minVisits) { minVisits = v; targetDayIdx = i; }
+    });
+  }
 
   const day = active.days[targetDayIdx];
   const lastVisit = [...day.activities].reverse().find(a => a.type === 'visit');

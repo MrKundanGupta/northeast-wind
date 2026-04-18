@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
-import { $cartCount, toggleSidebar, loadFromStorage } from "../stores/trip-cart";
+import { toggleSidebar } from "../stores/trip-cart";
+import { $tripCount, loadTripsFromStorage } from "../stores/trip-planner";
 
 export default function CartToggleButton() {
-  const count = useStore($cartCount);
+  const count = useStore($tripCount);
 
   useEffect(() => {
-    loadFromStorage();
+    loadTripsFromStorage();
   }, []);
 
   return (

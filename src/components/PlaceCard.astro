@@ -1,5 +1,5 @@
 ---
-import AddToTripButton from "./AddToTripButton";
+import FavouriteButton from "./FavouriteButton";
 
 interface LogisticsEntry {
   hub_name: string;
@@ -23,7 +23,7 @@ interface Props {
 
 const { id, name, category, subCategory, state, googleRating, reviewsCount, tags, image, logistics = [] } = Astro.props;
 const hasImage = image && image.length > 0;
-const cartPlace = { id, name, category, subCategory, state, googleRating, image: image ?? "", logistics };
+const favPlace = { id, name, category, state, image: image ?? null, googleRating };
 ---
 
 <a
@@ -72,8 +72,8 @@ const cartPlace = { id, name, category, subCategory, state, googleRating, image:
       </span>
     )}
 
-    {/* Add to trip */}
-    <AddToTripButton client:visible place={cartPlace} />
+    {/* Favourite */}
+    <FavouriteButton client:visible place={favPlace} />
 
     {/* Hover reveal: "View Details" bar */}
     <div class="place-card-explore">
