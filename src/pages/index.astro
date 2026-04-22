@@ -13,6 +13,7 @@ const states = [
   ]),
 ].sort();
 
+
 const featured = allPlaces
   .filter((p) => p.data.ratings.google_rating !== null)
   .sort((a, b) => (b.data.ratings.google_rating ?? 0) - (a.data.ratings.google_rating ?? 0))
