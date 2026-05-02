@@ -36,7 +36,7 @@ const STATE_META: Record<string, { img: string; tagline: string }> = {
     tagline: "Hornbill festival, tribal heritage & Dzukou Valley",
   },
   "Manipur": {
-    img: "/images/manipur/loktak-lake/1.png",
+    img: "/images/manipur/loktak-lake/1-sm.webp",
     tagline: "Loktak's floating islands, Kangla Fort & rare Sangai",
   },
   "Mizoram": {
@@ -51,7 +51,7 @@ const STATE_META: Record<string, { img: string; tagline: string }> = {
 const FALLBACK = { img: "/images/nagaland/dzukou-valley/1.jpg", tagline: "Explore unique destinations" };
 ---
 
-<BaseLayout title="Browse by State — Axomor · Northeast India">
+<BaseLayout title="Browse by State — Axomor · Northeast India" description="Explore all 8 states of Northeast India — Assam, Meghalaya, Sikkim, Arunachal Pradesh, Nagaland, Manipur, Mizoram and Tripura. Discover wildlife, waterfalls, temples, and hidden gems in each state.">
 
   {/* ── Page Header ─────────────────────────────────────── */}
   <section style="background: #1E3D10; position: relative; padding: 5rem 0 4rem; overflow: hidden;" class="tribal-pattern-dense">
@@ -92,7 +92,7 @@ const FALLBACK = { img: "/images/nagaland/dzukou-valley/1.jpg", tagline: "Explor
           const meta = STATE_META[state] ?? FALLBACK;
           return (
             <a
-              href={`/states/${state.toLowerCase().replace(/\s+/g, "-")}`}
+              href={`/states/${state.toLowerCase().replace(/\s+/g, "-")}/`}
               class={`state-img-card reveal`}
               style={`aspect-ratio: 3/4; animation-delay: ${i * 0.07}s;`}
             >

@@ -8,7 +8,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <nav class="mb-6 text-sm text-gray-500">
       <a href="/" class="hover:text-emerald-700">Home</a>
       <span class="mx-2">/</span>
-      <a href="/my-trips" class="hover:text-emerald-700">My Trips</a>
+      <a href="/my-trips/" class="hover:text-emerald-700">My Trips</a>
       <span class="mx-2">/</span>
       <span class="text-gray-900" id="trip-name-breadcrumb">Itinerary</span>
     </nav>
@@ -84,7 +84,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             <div class="mt-1 flex items-center gap-2 flex-wrap text-xs text-gray-500">
               <span>🕐 ${act.startTime} – ${act.endTime}</span>
               ${act.placeRating ? `<span class="text-amber-500">⭐ ${act.placeRating}</span>` : ''}
-              <a href="/places/${act.placeId}" class="ml-auto text-[11px] font-medium text-emerald-600 hover:underline" target="_blank">Details →</a>
+              <a href="/places/${act.placeId}/" class="ml-auto text-[11px] font-medium text-emerald-600 hover:underline" target="_blank">Details →</a>
             </div>
           </div>
         </div>
@@ -126,7 +126,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       root.innerHTML = `<div class="flex flex-col items-center py-20 text-center">
         <span class="text-5xl mb-4">🤷</span>
         <p class="text-gray-500 text-sm">Trip not found.</p>
-        <a href="/my-trips" class="mt-4 text-sm font-medium text-emerald-600 hover:underline">← Back to My Trips</a>
+        <a href="/my-trips/" class="mt-4 text-sm font-medium text-emerald-600 hover:underline">← Back to My Trips</a>
       </div>`;
       return;
     }

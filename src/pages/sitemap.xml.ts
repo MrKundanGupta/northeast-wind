@@ -30,7 +30,6 @@ export const GET: APIRoute = async () => {
     { loc: `${SITE}/states`,      priority: '0.9', changefreq: 'monthly' },
     { loc: `${SITE}/destinations`,priority: '0.9', changefreq: 'monthly' },
     { loc: `${SITE}/categories`,  priority: '0.9', changefreq: 'monthly' },
-    { loc: `${SITE}/plan`,        priority: '0.8', changefreq: 'monthly' },
     { loc: `${SITE}/map`,         priority: '0.7', changefreq: 'monthly' },
     { loc: `${SITE}/my-trips`,   priority: '0.6', changefreq: 'monthly' },
   ];
@@ -118,7 +117,7 @@ export const GET: APIRoute = async () => {
     ...pseoCityUrls,
     ...pseoCatUrls,
     ...placeUrls,
-  ];
+  ].map(u => ({ ...u, loc: u.loc.endsWith('/') ? u.loc : u.loc + '/' }));
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

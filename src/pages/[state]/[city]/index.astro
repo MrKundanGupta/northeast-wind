@@ -94,9 +94,9 @@ const CATEGORY_ICONS: Record<string, string> = {
       <nav class="mb-8 flex items-center gap-2 text-sm text-gray-400">
         <a href="/" class="hover:text-white">Home</a>
         <span>/</span>
-        <a href="/states" class="hover:text-white">States</a>
+        <a href="/states/" class="hover:text-white">States</a>
         <span>/</span>
-        <a href={`/states/${city.stateSlug}`} class="hover:text-white">{city.state}</a>
+        <a href={`/states/${city.stateSlug}/`} class="hover:text-white">{city.state}</a>
         <span>/</span>
         <span class="text-white">{city.name}</span>
       </nav>
@@ -120,7 +120,7 @@ const CATEGORY_ICONS: Record<string, string> = {
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {categoryCounts.map(({ cat, count }) => (
           <a
-            href={`/${city.stateSlug}/${city.slug}/${cat.slug}`}
+            href={`/${city.stateSlug}/${city.slug}/${cat.slug}/`}
             class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:border-emerald-300 hover:shadow-md"
           >
             <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 transition group-hover:bg-emerald-100">
@@ -159,7 +159,7 @@ const CATEGORY_ICONS: Record<string, string> = {
             Top-rated in {city.name}
           </h2>
           <a
-            href={`/${city.stateSlug}/${city.slug}/tourist-places`}
+            href={`/${city.stateSlug}/${city.slug}/tourist-places/`}
             class="text-sm font-semibold text-emerald-600 hover:text-emerald-700"
           >
             View all &rarr;
@@ -190,7 +190,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   <div class="bg-gray-50 py-8">
     <div class="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
       <a
-        href={`/states/${city.stateSlug}`}
+        href={`/states/${city.stateSlug}/`}
         class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 hover:text-emerald-700"
       >
         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

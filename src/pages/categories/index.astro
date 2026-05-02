@@ -63,7 +63,7 @@ function stateSlug(s: string) {
           const count = countMap.get(cat.slug) ?? 0;
           return (
             <a
-              href={`/categories/${cat.slug}`}
+              href={`/categories/${cat.slug}/`}
               class="cat-card reveal"
               style={`animation-delay: ${i * 0.08}s;`}
             >
@@ -126,7 +126,7 @@ function stateSlug(s: string) {
               <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 {CATEGORIES.map((cat) => (
                   <a
-                    href={`/categories/${cat.slug}/${stateSlug(state)}`}
+                    href={`/categories/${cat.slug}/${stateSlug(state)}/`}
                     style="font-size: 0.8125rem; color: rgba(28,18,8,0.58); font-family: 'Outfit', sans-serif; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.15s;"
                     class="seo-link"
                   >

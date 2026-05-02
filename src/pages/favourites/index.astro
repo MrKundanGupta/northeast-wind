@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Favourites — Axomor" description="Your saved favourite places across Northeast India.">
+<BaseLayout title="Favourites — Axomor" description="Your saved favourite places across Northeast India. Revisit and plan visits to temples, waterfalls, wildlife sanctuaries, and scenic destinations you've bookmarked.">
   <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
 
     <div class="mb-8 flex items-center justify-between">
@@ -44,7 +44,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </svg>
           <h2 class="text-lg font-semibold text-gray-900">No favourites yet</h2>
           <p class="mt-2 text-sm text-gray-500 max-w-xs">Tap the heart icon on any place card to save it here.</p>
-          <a href="/states" class="mt-6 rounded-xl bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition">
+          <a href="/states/" class="mt-6 rounded-xl bg-emerald-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition">
             Browse Places
           </a>
         </div>`;
@@ -55,7 +55,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         ${places.map(p => `
           <div class="group flex flex-col overflow-hidden rounded-2xl border bg-white shadow-sm hover:shadow-md transition" style="border-color: #E8DCC8;">
-            <a href="/places/${p.id}" class="block relative" style="aspect-ratio: 16/10; overflow: hidden; background: #EDE0C8;">
+            <a href="/places/${p.id}/" class="block relative" style="aspect-ratio: 16/10; overflow: hidden; background: #EDE0C8;">
               ${p.image
                 ? `<img src="${p.image}" alt="${p.name}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />`
                 : `<div class="flex h-full w-full items-center justify-center bg-emerald-100"><svg class="h-10 w-10 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91" /></svg></div>`
@@ -66,7 +66,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             </a>
             <div class="flex flex-1 items-start justify-between p-4">
               <div class="min-w-0">
-                <a href="/places/${p.id}" class="block text-base font-semibold text-gray-900 hover:text-emerald-700 transition truncate leading-tight">${p.name}</a>
+                <a href="/places/${p.id}/" class="block text-base font-semibold text-gray-900 hover:text-emerald-700 transition truncate leading-tight">${p.name}</a>
                 <p class="mt-0.5 text-xs text-gray-500">${p.category} · ${p.state}</p>
               </div>
               <button data-remove="${p.id}" class="ml-3 flex-shrink-0 rounded-full p-1.5 text-rose-300 hover:bg-rose-50 hover:text-rose-500 transition" aria-label="Remove from favourites">

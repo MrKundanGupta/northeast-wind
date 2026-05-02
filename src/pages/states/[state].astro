@@ -27,12 +27,12 @@ const stateCities = cities.filter((c) => c.stateSlug === stateSlug);
 const cityImagesMap = cityImages as Record<string, string>;
 ---
 
-<BaseLayout title={`${stateName} — Northeast Explorer`}>
+<BaseLayout title={`${stateName} — Northeast India Travel Guide | Axomor`} description={`Explore ${places.length} must-visit places in ${stateName}, Northeast India — wildlife sanctuaries, waterfalls, temples, heritage sites, and adventure spots. Find the best destinations with ratings and reviews.`}>
   <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
     <nav class="mb-6 text-sm text-gray-500">
       <a href="/" class="hover:text-emerald-700">Home</a>
       <span class="mx-2">/</span>
-      <a href="/states" class="hover:text-emerald-700">States</a>
+      <a href="/states/" class="hover:text-emerald-700">States</a>
       <span class="mx-2">/</span>
       <span class="text-gray-900">{stateName}</span>
     </nav>
@@ -62,7 +62,7 @@ const cityImagesMap = cityImages as Record<string, string>;
             const img = cityImagesMap[c.slug];
             return (
               <a
-                href={`/${c.stateSlug}/${c.slug}`}
+                href={`/${c.stateSlug}/${c.slug}/`}
                 class="group relative overflow-hidden rounded-xl border border-gray-200 shadow-sm transition hover:shadow-md"
               >
                 {img && (

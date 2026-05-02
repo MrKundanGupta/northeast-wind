@@ -23,7 +23,7 @@ const featured = allPlaces
 const STATE_IMAGES: Record<string, string> = {
   "Arunachal Pradesh": "/images/arunachal-pradesh/tawang-monastery/1.jpg",
   "Assam":             "/images/assam/kaziranga-national-park/1.jpg",
-  "Manipur":           "/images/manipur/loktak-lake/1.png",
+  "Manipur":           "/images/manipur/loktak-lake/1-sm.webp",
   "Meghalaya":         "/images/meghalaya/nohkalikai-falls/1.jpg",
   "Mizoram":           "/images/mizoram/vantawng-falls/1.jpg",
   "Nagaland":          "/images/nagaland/dzukou-valley/1.jpg",
@@ -53,8 +53,7 @@ const FALLBACK_IMG = "/images/nagaland/dzukou-valley/1.jpg";
       src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1600&q=60"
       srcset="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=828&q=60 828w, https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1280&q=60 1280w, https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1600&q=60 1600w"
       sizes="100vw"
-      alt=""
-      aria-hidden="true"
+      alt="Mountain landscape of Northeast India"
       fetchpriority="high"
       loading="eager"
       decoding="async"
@@ -172,7 +171,7 @@ const FALLBACK_IMG = "/images/nagaland/dzukou-valley/1.jpg";
           const img = STATE_IMAGES[state] ?? FALLBACK_IMG;
           return (
             <a
-              href={`/states/${state.toLowerCase().replace(/\s+/g, "-")}`}
+              href={`/states/${state.toLowerCase().replace(/\s+/g, "-")}/`}
               class={`state-img-card reveal`}
               style={`aspect-ratio: 3/4; animation-delay: ${i * 0.06}s;`}
             >
@@ -215,7 +214,7 @@ const FALLBACK_IMG = "/images/nagaland/dzukou-valley/1.jpg";
           </h2>
           <div style="width: 3.5rem; height: 1.5px; background: linear-gradient(90deg, #C4892A, transparent); margin-top: 0.875rem;"></div>
         </div>
-        <a href="/states"
+        <a href="/states/"
            class="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold transition"
            style="color: #145C35; font-family: 'Outfit', sans-serif; text-decoration: none; padding: 0.5rem 1rem; border: 1px solid rgba(58,122,36,0.25); border-radius: 9999px;">
           View all

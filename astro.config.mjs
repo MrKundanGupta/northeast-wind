@@ -15,7 +15,7 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   site: 'https://axomor.com',
   output: 'server',
-  trailingSlash: 'never',
+  trailingSlash: 'ignore',
   adapter: cloudflare(),
   vite: {
     plugins: [tailwindcss()]

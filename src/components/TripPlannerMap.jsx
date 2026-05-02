@@ -172,7 +172,7 @@ export default function TripPlannerMap({ places, hubs }) {
           ${driveHtml}
           ${distHtml}
           ${directionsLink}
-          <a href="/places/${p.id}" class="popup-detail">View Details →</a>
+          <a href="/places/${p.id}/" class="popup-detail">View Details →</a>
         </div>`,
         { maxWidth: 260, className: "custom-popup" }
       );

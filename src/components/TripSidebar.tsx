@@ -173,7 +173,7 @@ function ActivityRow({
                 <span>🕐 {activity.startTime}–{activity.endTime}</span>
                 {activity.userOverride && <span className="text-emerald-400 text-[10px]">✎</span>}
                 {activity.placeId && (
-                  <a href={`/places/${activity.placeId}`}
+                  <a href={`/places/${activity.placeId}/`}
                     className="ml-auto text-[11px] text-emerald-600 hover:underline"
                     target="_blank" rel="noopener">
                     Details →

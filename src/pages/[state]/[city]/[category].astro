@@ -154,9 +154,9 @@ const nearbyCities = getNearbyCities(city, 3);
       <nav class="mb-8 flex items-center gap-2 text-sm text-gray-400">
         <a href="/" class="hover:text-white">Home</a>
         <span>/</span>
-        <a href={`/states/${city.stateSlug}`} class="hover:text-white">{city.state}</a>
+        <a href={`/states/${city.stateSlug}/`} class="hover:text-white">{city.state}</a>
         <span>/</span>
-        <a href={`/${city.stateSlug}/${city.slug}`} class="hover:text-white">{city.name}</a>
+        <a href={`/${city.stateSlug}/${city.slug}/`} class="hover:text-white">{city.name}</a>
         <span>/</span>
         <span class="text-white">{cat.label}</span>
       </nav>
@@ -199,7 +199,7 @@ const nearbyCities = getNearbyCities(city, 3);
             Check back soon!
           </p>
           <a
-            href={`/${city.stateSlug}/${city.slug}`}
+            href={`/${city.stateSlug}/${city.slug}/`}
             class="mt-6 inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700"
           >
             Explore {city.name}
@@ -210,7 +210,7 @@ const nearbyCities = getNearbyCities(city, 3);
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {mdxPlaces.map((place, idx) => {
             const d = place.data;
-            const placeUrl = `/places/${d.id}`;
+            const placeUrl = `/places/${d.id}/`;
             const bestFor = deriveBestFor(d.tags);
             const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${d.location.lat},${d.location.lng}`;
             return (
@@ -390,7 +390,7 @@ const nearbyCities = getNearbyCities(city, 3);
         <div class="flex flex-wrap gap-3">
           {otherCategories.map((c) => (
             <a
-              href={`/${city.stateSlug}/${city.slug}/${c.slug}`}
+              href={`/${city.stateSlug}/${city.slug}/${c.slug}/`}
               class="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:border-emerald-300 hover:text-emerald-700 hover:shadow-md"
             >
               {c.label} in {city.name}
@@ -407,7 +407,7 @@ const nearbyCities = getNearbyCities(city, 3);
         <div class="flex flex-wrap gap-3">
           {nearbyCities.map((nc) => (
             <a
-              href={`/${nc.stateSlug}/${nc.slug}/${cat.slug}`}
+              href={`/${nc.stateSlug}/${nc.slug}/${cat.slug}/`}
               class="rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:border-emerald-300 hover:text-emerald-700 hover:shadow-md"
             >
               {cat.label} in {nc.name}

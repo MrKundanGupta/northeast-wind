@@ -11,14 +11,15 @@ interface Props {
 }
 
 const { title, description = "Explore the best destinations across Northeast India", image } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, 'https://axomor.com').href;
+const rawPath = Astro.url.pathname;
+const canonicalURL = new URL(rawPath.endsWith('/') ? rawPath : rawPath + '/', 'https://axomor.com').href;
 const ogImage = image ?? 'https://axomor.com/logo_full.png';
 
 const navLinks = [
-  { href: "/states",       label: "States",         icon: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" },
-  { href: "/destinations", label: "Destinations",   icon: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" },
-  { href: "/categories",   label: "Categories",     icon: "M4 6h16M4 10h16M4 14h16M4 18h16" },
-  { href: "/map",          label: "Map",            icon: "M9 3v14l6-4 6 4V3M9 3H3v14l6-4" },
+  { href: "/states/",       label: "States",         icon: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" },
+  { href: "/destinations/", label: "Destinations",   icon: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" },
+  { href: "/categories/",   label: "Categories",     icon: "M4 6h16M4 10h16M4 14h16M4 18h16" },
+  { href: "/map/",          label: "Map",            icon: "M9 3v14l6-4 6 4V3M9 3H3v14l6-4" },
 ];
 ---
 
@@ -219,7 +220,7 @@ const navLinks = [
             </p>
             <div style="display: flex; flex-wrap: wrap; gap: 0.625rem;">
               {["Assam","Meghalaya","Sikkim","Arunachal Pradesh","Nagaland","Manipur","Mizoram","Tripura"].map(s => (
-                <a href={`/states/${s.toLowerCase().replace(/\s+/g,"-")}`}
+                <a href={`/states/${s.toLowerCase().replace(/\s+/g,"-")}/`}
                    style="font-size: 0.8125rem; font-weight: 500; color: rgba(249,244,236,0.60); font-family: 'Outfit', sans-serif; text-decoration: none; background: rgba(255,255,255,0.06); border: 1px solid rgba(196,137,42,0.18); border-radius: 9999px; padding: 0.3rem 0.875rem; transition: background 0.2s, color 0.2s;" class="mobile-state-pill">
                   {s}
                 </a>
@@ -276,7 +277,7 @@ const navLinks = [
           <div>
             <p style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #C4892A; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif;">Explore</p>
             <div class="flex flex-col gap-2.5">
-              {[{href:"/states",label:"By State"},{href:"/destinations",label:"Destinations"},{href:"/categories",label:"Categories"},{href:"/my-trips",label:"My Trips"},{href:"/favourites",label:"Favourites"},{href:"/map",label:"Interactive Map"}].map(({href,label}) => (
+              {[{href:"/states/",label:"By State"},{href:"/destinations/",label:"Destinations"},{href:"/categories/",label:"Categories"},{href:"/my-trips/",label:"My Trips"},{href:"/favourites/",label:"Favourites"},{href:"/map/",label:"Interactive Map"}].map(({href,label}) => (
                 <a href={href} class="footer-link"
                    style="font-size: 0.875rem; color: rgba(249,244,236,0.55); font-family: 'Outfit', sans-serif; text-decoration: none; transition: color 0.15s ease; display: flex; align-items: center; gap: 0.5rem;">
                   <span class="footer-dot" style="width: 4px; height: 4px; border-radius: 50%; background: rgba(196,137,42,0.45); flex-shrink: 0; transition: background 0.15s ease;"></span>
@@ -291,7 +292,7 @@ const navLinks = [
             <p style="font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #C4892A; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif;">States</p>
             <div class="flex flex-col gap-2.5">
               {["Assam","Meghalaya","Sikkim","Arunachal Pradesh","Nagaland","Manipur"].map(s => (
-                <a href={`/states/${s.toLowerCase().replace(/\s+/g,"-")}`} class="footer-link"
+                <a href={`/states/${s.toLowerCase().replace(/\s+/g,"-")}/`} class="footer-link"
                    style="font-size: 0.875rem; color: rgba(249,244,236,0.55); font-family: 'Outfit', sans-serif; text-decoration: none; transition: color 0.15s ease; display: flex; align-items: center; gap: 0.5rem;">
                   <span class="footer-dot" style="width: 4px; height: 4px; border-radius: 50%; background: rgba(196,137,42,0.45); flex-shrink: 0; transition: background 0.15s ease;"></span>
                   {s}

@@ -149,7 +149,7 @@ function ActivityRow({ activity, tripId, dayNum }: { activity: TripActivity; tri
                     <span className="text-xs text-amber-500">⭐ {activity.placeRating}</span>
                   )}
                   <a
-                    href={`/places/${activity.placeId}`}
+                    href={`/places/${activity.placeId}/`}
                     className="ml-auto text-[11px] font-medium text-emerald-600 hover:underline"
                     target="_blank"
                     rel="noopener"

@@ -29,7 +29,7 @@ const STATE_FALLBACK: Record<string, string> = {
   "Sikkim":            "/images/sikkim/tsomgo-lake/1.jpg",
   "Arunachal Pradesh": "/images/arunachal-pradesh/tawang-monastery/1.jpg",
   "Nagaland":          "/images/nagaland/dzukou-valley/1.jpg",
-  "Manipur":           "/images/manipur/loktak-lake/1.png",
+  "Manipur":           "/images/manipur/loktak-lake/1-sm.webp",
   "Mizoram":           "/images/mizoram/vantawng-falls/1.jpg",
   "Tripura":           "/images/tripura/neermahal/1.jpg",
 };
@@ -121,7 +121,7 @@ const stateGroups = [...byState.entries()].sort((a, b) => a[0].localeCompare(b[0
               <div style={`width: 4px; height: 2.5rem; background: ${accent}; border-radius: 2px; flex-shrink: 0;`}></div>
               <div>
                 <a
-                  href={`/states/${slugify(state)}`}
+                  href={`/states/${slugify(state)}/`}
                   style={`font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400; color: #1C1208; text-decoration: none; line-height: 1; transition: color 0.15s;`}
                   class="state-heading-link"
                 >
@@ -137,7 +137,7 @@ const stateGroups = [...byState.entries()].sort((a, b) => a[0].localeCompare(b[0
             <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {cities.map((city, i) => (
                 <a
-                  href={`/destinations/${city.slug}`}
+                  href={`/destinations/${city.slug}/`}
                   class="dest-card reveal"
                   style={`animation-delay: ${i * 0.05}s; position: relative; display: block; border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; text-decoration: none; box-shadow: 0 2px 12px rgba(0,0,0,0.10); transition: transform 0.3s ease, box-shadow 0.3s ease;`}
                 >

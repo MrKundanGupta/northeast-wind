@@ -280,7 +280,7 @@ export default function TripWizard() {
             <span className="font-semibold text-gray-900">Trip Planner</span>
           </div>
           <div className="flex items-center gap-2">
-            <a href="/my-trips" className="rounded-lg px-3 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-50">
+            <a href="/my-trips/" className="rounded-lg px-3 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-50">
               My Trips {trips > 0 && `(${trips})`}
             </a>
             <button onClick={closeWizard} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100" aria-label="Close">
